@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: TaskHolder
+Bundle-SymbolicName: rcp.taskholder;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.ui,
+ org.eclipse.equinox.ds;bundle-version="1.4.400"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
