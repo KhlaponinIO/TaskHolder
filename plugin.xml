@@ -43,7 +43,7 @@
       <command
             categoryId="rcp.taskholder.file_category"
             id="rcp.taskholder.saveFile"
-            name="Save">
+            name="Save File">
       </command>
       <command
             categoryId="rcp.taskholder.file_category"
@@ -94,6 +94,25 @@
             id="rcp.taskholder.helpCategory"
             name="Help Category">
       </category>
+      <category
+            id="rcp.taskholder.toolbarCategory"
+            name="Toolbar Category">
+      </category>
+      <command
+            categoryId="rcp.taskholder.toolbarCategory"
+            id="rcp.taskholder.addNewLine"
+            name="New">
+      </command>
+      <command
+            categoryId="rcp.taskholder.toolbarCategory"
+            id="rcp.taskholder.saveRow"
+            name="Save Row">
+      </command>
+      <command
+            categoryId="rcp.taskholder.toolbarCategory"
+            id="rcp.taskholder.cancel"
+            name="Cancel">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
@@ -137,6 +156,18 @@
       <handler
             class="rcp.taskholder.handlers.AboutHandler"
             commandId="rcp.taskholder.about">
+      </handler>
+      <handler
+            class="rcp.taskholder.handlers.AddNewLineHandler"
+            commandId="rcp.taskholder.addNewLine">
+      </handler>
+      <handler
+            class="rcp.taskholder.handlers.SaveRowHandler"
+            commandId="rcp.taskholder.saveRow">
+      </handler>
+      <handler
+            class="rcp.taskholder.handlers.CancelHandler"
+            commandId="rcp.taskholder.cancel">
       </handler>
    </extension>
    <extension
@@ -206,6 +237,35 @@
                   style="push">
             </command>
          </menu>
+    
+      
+      </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="toolbar:org.eclipse.ui.main.toolbar">
+         <toolbar
+               id="rcp.taskholder.toolbar">
+            <command
+                  commandId="rcp.taskholder.addNewLine"
+                  icon="icons/eclipse32.png"
+                  style="push">
+            </command>
+            <command
+                  commandId="rcp.taskholder.saveRow"
+                  icon="icons/eclipse512.png"
+                  style="push">
+            </command>
+            <command
+                  commandId="rcp.taskholder.delete"
+                  icon="icons/eclipse256.png"
+                  style="push">
+            </command>
+            <command
+                  commandId="rcp.taskholder.cancel"
+                  icon="icons/eclipse64.png"
+                  style="push">
+            </command>
+         </toolbar>
       </menuContribution>
    </extension>
 

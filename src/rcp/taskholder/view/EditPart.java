@@ -109,19 +109,19 @@ public class EditPart extends ViewPart {
     
     public void addButtonsListeners() {
         newButton.addListener(SWT.Selection, event -> {
-            System.out.println("new row created");
+            System.out.println("new row created"); //stub
         });
 
         saveButton.addListener(SWT.Selection, event -> {
-            System.out.println("data saved");
+            System.out.println("data saved"); //stub
         });
 
         deleteButton.addListener(SWT.Selection, event -> {
-            System.out.println("row deleted");
+            System.out.println("row deleted"); //stub
         });
 
         cancelButton.addListener(SWT.Selection, event -> {
-            System.out.println("changes canceled");
+            System.out.println("changes canceled"); //stub
         });
     }
 
