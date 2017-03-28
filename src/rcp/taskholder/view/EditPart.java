@@ -80,7 +80,7 @@ public class EditPart extends ViewPart {
         checkTaskButton.setLayoutData(checkTaskButtonGrid);
 
         addButtons(composite);
-//        addButtonsListeners();
+        addButtonsListeners();
 //        addTextFieldsListeners();
     }
 
@@ -105,6 +105,24 @@ public class EditPart extends ViewPart {
 //        cancelButton.setText(CANCEL_BUTTON_NAME);
         cancelButton.setText("Cancel");
         cancelButton.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, true));
+    }
+    
+    public void addButtonsListeners() {
+        newButton.addListener(SWT.Selection, event -> {
+            System.out.println("new row created");
+        });
+
+        saveButton.addListener(SWT.Selection, event -> {
+            System.out.println("data saved");
+        });
+
+        deleteButton.addListener(SWT.Selection, event -> {
+            System.out.println("row deleted");
+        });
+
+        cancelButton.addListener(SWT.Selection, event -> {
+            System.out.println("changes canceled");
+        });
     }
 
 }

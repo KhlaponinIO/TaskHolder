@@ -20,10 +20,11 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
     @Override
     public void preWindowOpen() {
         IWorkbenchWindowConfigurer configurer = getWindowConfigurer();
-        configurer.setInitialSize(new Point(850, 350));
+        configurer.setInitialSize(new Point(850, 300));
         configurer.getWindow().getShell().setMinimumSize(800, 300);
         configurer.setShowCoolBar(false);
         configurer.setShowStatusLine(false);
+        configurer.setShowMenuBar(true);
         configurer.setTitle("Task holder"); //$NON-NLS-1$
     }
 }
