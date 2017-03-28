@@ -19,5 +19,20 @@
             id="rcp.taskholder.perspective">
       </perspective>
    </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            class="rcp.taskholder.view.TablePart"
+            id="rcp.taskholder.view.TablePart"
+            name="TablePart"
+            restorable="true">
+      </view>
+      <view
+            class="rcp.taskholder.view.EditPart"
+            id="rcp.taskholder.view.EditPart"
+            name="EditPart"
+            restorable="true">
+      </view>
+   </extension>
 
 </plugin>

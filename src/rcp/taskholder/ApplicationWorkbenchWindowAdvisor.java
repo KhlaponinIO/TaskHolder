@@ -11,18 +11,19 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
     public ApplicationWorkbenchWindowAdvisor(IWorkbenchWindowConfigurer configurer) {
         super(configurer);
     }
-    
+
     @Override
     public ActionBarAdvisor createActionBarAdvisor(IActionBarConfigurer configurer) {
         return new ActionBarAdvisor(configurer);
     }
-    
+
     @Override
     public void preWindowOpen() {
         IWorkbenchWindowConfigurer configurer = getWindowConfigurer();
-        configurer.setInitialSize(new Point(400, 300));
+        configurer.setInitialSize(new Point(850, 350));
+        configurer.getWindow().getShell().setMinimumSize(800, 300);
         configurer.setShowCoolBar(false);
         configurer.setShowStatusLine(false);
-        configurer.setTitle("Hello RCP"); //$NON-NLS-1$
+        configurer.setTitle("Task holder"); //$NON-NLS-1$
     }
 }
