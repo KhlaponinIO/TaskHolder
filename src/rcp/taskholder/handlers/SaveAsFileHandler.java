@@ -1,46 +1,37 @@
 package rcp.taskholder.handlers;
 
+import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.core.commands.IHandler;
-import org.eclipse.core.commands.IHandlerListener;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.FileDialog;
 
-public class SaveAsFileHandler implements IHandler {
+import rcp.taskholder.services.FileService;
+import rcp.taskholder.services.PersonService;
 
-    @Override
-    public void addHandlerListener(IHandlerListener handlerListener) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void dispose() {
-        // TODO Auto-generated method stub
-
+public class SaveAsFileHandler extends AbstractHandler {
+    
+    private PersonService service;
+    
+    {
+        service = new PersonService();
     }
 
     @Override
     public Object execute(ExecutionEvent event) throws ExecutionException {
-        // TODO Auto-generated method stub
+        
+        FileDialog fileDialog = new FileDialog(Display.getCurrent().getShells()[0], SWT.SAVE);
+        fileDialog.setText("Save as");
+        fileDialog.setFilterPath("D:/");
+        String[] filterExt = { ".json", ".xml" };
+        fileDialog.setFilterExtensions(filterExt);
+        
+        String path = fileDialog.open();
+        
+        FileService.saveDataToFile(service.getData(), path);
+        
         return null;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    @Override
-    public boolean isHandled() {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    @Override
-    public void removeHandlerListener(IHandlerListener handlerListener) {
-        // TODO Auto-generated method stub
-
     }
 
 }

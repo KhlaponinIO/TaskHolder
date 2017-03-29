@@ -1,51 +1,39 @@
 package rcp.taskholder.handlers;
 
+import java.util.ResourceBundle;
+
+import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.core.commands.IHandler;
-import org.eclipse.core.commands.IHandlerListener;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.handlers.HandlerUtil;
 
-public class SaveFileHandler implements IHandler {
+import rcp.taskholder.services.FileService;
+import rcp.taskholder.services.PersonService;
+import rcp.taskholder.util.JsonFileWriter;
+import rcp.taskholder.util.PackageUtil;
 
-    @Override
-    public void addHandlerListener(IHandlerListener handlerListener) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void dispose() {
-        // TODO Auto-generated method stub
-
+public class SaveFileHandler extends AbstractHandler {
+    
+    private PersonService service;
+    private ResourceBundle rb;
+    
+    private final String SAVE_TITLE;
+    private final String SAVE_MESSAGE;
+    
+    {
+        rb = ResourceBundle.getBundle(PackageUtil.getPackageName(this.getClass()) + ".dialogs");
+        SAVE_TITLE = rb.getString("SaveFileHandler.save.message.title");
+        SAVE_MESSAGE = rb.getString("SaveFileHandler.save.message");
+        
+        service = new PersonService();
     }
 
     @Override
     public Object execute(ExecutionEvent event) throws ExecutionException {
-        // TODO Auto-generated method stub
-        IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindowChecked(event);
-        MessageDialog.openInformation(window.getShell(), "Title", "Some message");
+        if (MessageDialog.openQuestion(null, SAVE_TITLE, SAVE_MESSAGE + " " + JsonFileWriter.PATH + "?")) {
+            FileService.saveDataToFile(service.getData());
+        }
         return null;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    @Override
-    public boolean isHandled() {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    @Override
-    public void removeHandlerListener(IHandlerListener handlerListener) {
-        // TODO Auto-generated method stub
-
     }
 
 }

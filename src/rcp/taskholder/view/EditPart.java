@@ -9,13 +9,14 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.part.ViewPart;
 
-import rcp.taskholder.model.Person;
-import rcp.taskholder.services.PersonService;
+import rcp.taskholder.util.ApplicationScope;
 import rcp.taskholder.util.PackageUtil;
 
 public class EditPart extends ViewPart {
+    
     
     public static final String ID = "rcp.taskholder.view.EditPart";
     
@@ -28,7 +29,7 @@ public class EditPart extends ViewPart {
     private Text groupTextField;
     private Button checkTaskButton;
     
-    private PersonService service;
+    private ApplicationScope scope;
     
     private ResourceBundle rb;
     private final String NEW_BUTTON_NAME;
@@ -51,7 +52,7 @@ public class EditPart extends ViewPart {
     }
 
     public EditPart() {
-        
+        scope = ApplicationScope.getInstance();
     }
 
     @Override
@@ -107,6 +108,11 @@ public class EditPart extends ViewPart {
         addButtons(composite);
         addButtonsListeners();
 //        addTextFieldsListeners();
+        
+        //add data to scope
+        scope.putElement("nameTextField", nameTextField);
+        scope.putElement("groupTextField", groupTextField);
+        scope.putElement("checkTaskButton", checkTaskButton);
     }
 
     private void addButtons(Composite parent) {
@@ -130,21 +136,35 @@ public class EditPart extends ViewPart {
     
     public void addButtonsListeners() {
         newButton.addListener(SWT.Selection, event -> {
-            service.addRow(new Person());
-            System.out.println("new row created"); //stub
+            executeCommand("rcp.taskholder.addNewLine");
         });
 
         saveButton.addListener(SWT.Selection, event -> {
-            System.out.println("data saved"); //stub
+            executeCommand("rcp.taskholder.saveRow");
         });
 
         deleteButton.addListener(SWT.Selection, event -> {
-            System.out.println("row deleted"); //stub
+            executeCommand("rcp.taskholder.delete");
         });
 
         cancelButton.addListener(SWT.Selection, event -> {
-            System.out.println("changes canceled"); //stub
+            executeCommand("rcp.taskholder.cancel");
         });
+    }
+    
+    /**
+     * Calling the command by id
+     * 
+     * @param command
+     */
+    private void executeCommand(String command) {
+        // From a view you get the site which allow to get the service 
+        IHandlerService handlerService = getSite().getService(IHandlerService.class);
+        try {
+            handlerService.executeCommand(command, null);
+        } catch (Exception e) {
+            throw new RuntimeException("command " + command + " not found");
+        }
     }
 
 }

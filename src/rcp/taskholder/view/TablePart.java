@@ -4,16 +4,22 @@ import java.util.ResourceBundle;
 
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.part.ViewPart;
 
 import rcp.taskholder.model.Person;
 import rcp.taskholder.services.PersonService;
+import rcp.taskholder.util.ApplicationScope;
 import rcp.taskholder.util.PackageUtil;
 
 public class TablePart extends ViewPart {
@@ -22,6 +28,7 @@ public class TablePart extends ViewPart {
     
     private TableViewer tableViewer;
     private PersonService data;
+    private ApplicationScope scope;
     
     private ResourceBundle rb;
     private final String FIRST_COLUMN_NAME;
@@ -37,11 +44,13 @@ public class TablePart extends ViewPart {
 
     public TablePart() {
         data = new PersonService();
+        scope = ApplicationScope.getInstance();
     }
 
     @Override
     public void createPartControl(Composite parent) {
         buildAndLayoutTable(parent);
+        addRowSelectionEvent();
     }
 
     @Override
@@ -61,6 +70,7 @@ public class TablePart extends ViewPart {
 
         tableViewer.setContentProvider(new ArrayContentProvider());
         tableViewer.setInput(data.getData());
+        scope.putElement("tableViewer", tableViewer);
 
     }
     
@@ -108,6 +118,34 @@ public class TablePart extends ViewPart {
         column.setMoveable(true);
 
         return viewerColumn;
+    }
+    
+    public void addRowSelectionEvent() {
+        tableViewer.addSelectionChangedListener(new ISelectionChangedListener() {
+
+            @Override
+            public void selectionChanged(final SelectionChangedEvent event) {
+
+                IStructuredSelection selection = (IStructuredSelection) event.getSelection();
+                showRowDataOnEditBar(selection, (Text) scope.getElement("nameTextField"), 
+                        (Text) scope.getElement("groupTextField"), (Button) scope.getElement("checkTaskButton"));
+
+            }
+        });
+    }
+    
+    private void showRowDataOnEditBar(IStructuredSelection selection, Text nameTextField, Text groupTextField,
+            Button checkTaskButton) {
+        Person rowData = (Person) selection.getFirstElement();
+        if (rowData == null) {
+            nameTextField.setText("");
+            groupTextField.setText("");
+            checkTaskButton.setSelection(false);
+        } else {
+            nameTextField.setText(rowData.getName());
+            groupTextField.setText(rowData.getGroup());
+            checkTaskButton.setSelection(rowData.isTaskDone());
+        }
     }
     
 }

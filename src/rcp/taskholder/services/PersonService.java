@@ -80,5 +80,15 @@ public class PersonService {
     public boolean updateRow(int index, Person rowData) {
         return provider.update(index, rowData);
     }
+    
+    /**
+     * Sets the data from the file If the path wrong or such file doesn't exit table will be fullfilled with default
+     * data
+     * 
+     * @param filePath - full path to the file where table data stored
+     */
+    public void setDataFromFile(String filePath) {
+        provider.setData(filePath);
+    }
 
 }
