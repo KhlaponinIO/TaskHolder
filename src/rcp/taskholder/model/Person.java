@@ -14,7 +14,9 @@ public class Person {
     }
     
     public Person() {
-        
+        this.name = "--empty--";
+        this.group = "-1";
+        this.taskDone = false;
     }
 
     public String getName() {
@@ -74,7 +76,10 @@ public class Person {
             return false;
         return true;
     }
-    
-    
 
+    @Override
+    public String toString() {
+        return "Person [name=" + name + ", group=" + group + ", taskDone=" + taskDone + "]";
+    }
+    
 }

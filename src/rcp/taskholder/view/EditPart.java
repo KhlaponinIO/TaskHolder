@@ -1,5 +1,7 @@
 package rcp.taskholder.view;
 
+import java.util.ResourceBundle;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -8,6 +10,10 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.part.ViewPart;
+
+import rcp.taskholder.model.Person;
+import rcp.taskholder.services.PersonService;
+import rcp.taskholder.util.PackageUtil;
 
 public class EditPart extends ViewPart {
     
@@ -21,6 +27,28 @@ public class EditPart extends ViewPart {
     private Text nameTextField;
     private Text groupTextField;
     private Button checkTaskButton;
+    
+    private PersonService service;
+    
+    private ResourceBundle rb;
+    private final String NEW_BUTTON_NAME;
+    private final String SAVE_BUTTON_NAME;
+    private final String DELETE_BUTTON_NAME;
+    private final String CANCEL_BUTTON_NAME;
+    private final String NAME_LABEL;
+    private final String GROUP_LABEL;
+    private final String TASK_LABEL;
+    
+    {
+        rb = ResourceBundle.getBundle(PackageUtil.getPackageName(this.getClass()) + ".elementsNames");
+        NEW_BUTTON_NAME = rb.getString("EditPart.button.new");
+        SAVE_BUTTON_NAME = rb.getString("EditPart.button.save");
+        DELETE_BUTTON_NAME = rb.getString("EditPart.button.delete");
+        CANCEL_BUTTON_NAME = rb.getString("EditPart.button.cancel");
+        NAME_LABEL = rb.getString("EditPart.label.name");
+        GROUP_LABEL = rb.getString("EditPart.label.group");
+        TASK_LABEL = rb.getString("EditPart.label.task");
+    }
 
     public EditPart() {
         
@@ -33,7 +61,7 @@ public class EditPart extends ViewPart {
 
     @Override
     public void setFocus() {
-        
+        //stub
     }
     
     private void createFieldsAndButtons(Composite parent) {
@@ -43,8 +71,7 @@ public class EditPart extends ViewPart {
         composite.setLayout(grid);
 
         Label name = new Label(composite, SWT.LEFT);
-//        name.setText(NAME_LABEL);
-        name.setText("Name:");
+        name.setText(NAME_LABEL);
         GridData nameGridData = new GridData(SWT.BEGINNING, SWT.BEGINNING, true, true);
         name.setLayoutData(nameGridData);
 
@@ -55,8 +82,7 @@ public class EditPart extends ViewPart {
         nameTextField.setLayoutData(nameTextFieldData);
 
         Label group = new Label(composite, SWT.LEFT);
-//        group.setText(GROUP_LABEL);
-        group.setText("Group:");
+        group.setText(GROUP_LABEL);
         GridData groupGridData = new GridData(SWT.FILL, SWT.BEGINNING, true, true);
         group.setLayoutData(groupGridData);
 
@@ -67,8 +93,7 @@ public class EditPart extends ViewPart {
         groupTextField.setLayoutData(groupTextFieldData);
 
         Label task = new Label(composite, SWT.LEFT);
-//        task.setText(TASK_LABEL);
-        task.setText("Task done");
+        task.setText(TASK_LABEL);
         GridData taskGridData = new GridData(SWT.BEGINNING, SWT.BEGINNING, true, true);
         taskGridData.horizontalAlignment = GridData.FILL;
         taskGridData.horizontalSpan = 3;
@@ -87,28 +112,25 @@ public class EditPart extends ViewPart {
     private void addButtons(Composite parent) {
 
         newButton = new Button(parent, SWT.PUSH);
-//        newButton.setText(NEW_BUTTON_NAME);
-        newButton.setText("New");
+        newButton.setText(NEW_BUTTON_NAME);
         newButton.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, true));
 
         saveButton = new Button(parent, SWT.PUSH);
-//        saveButton.setText(SAVE_BUTTON_NAME);
-        saveButton.setText("Save");
+        saveButton.setText(SAVE_BUTTON_NAME);
         saveButton.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, true));
 
         deleteButton = new Button(parent, SWT.PUSH);
-//        deleteButton.setText(DELETE_BUTTON_NAME);
-        deleteButton.setText("Delete");
+        deleteButton.setText(DELETE_BUTTON_NAME);
         deleteButton.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, true));
 
         cancelButton = new Button(parent, SWT.PUSH);
-//        cancelButton.setText(CANCEL_BUTTON_NAME);
-        cancelButton.setText("Cancel");
+        cancelButton.setText(CANCEL_BUTTON_NAME);
         cancelButton.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, true));
     }
     
     public void addButtonsListeners() {
         newButton.addListener(SWT.Selection, event -> {
+            service.addRow(new Person());
             System.out.println("new row created"); //stub
         });
 

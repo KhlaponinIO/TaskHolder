@@ -1,5 +1,7 @@
 package rcp.taskholder.view;
 
+import java.util.ResourceBundle;
+
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
@@ -11,15 +13,30 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.part.ViewPart;
 
 import rcp.taskholder.model.Person;
+import rcp.taskholder.services.PersonService;
+import rcp.taskholder.util.PackageUtil;
 
 public class TablePart extends ViewPart {
     
     public static final String ID = "rcp.taskholder.view.TablePart";
     
     private TableViewer tableViewer;
+    private PersonService data;
+    
+    private ResourceBundle rb;
+    private final String FIRST_COLUMN_NAME;
+    private final String SECOND_COLUMN_NAME;
+    private final String THIRD_COLUMN_NAME;
+
+    {
+        rb = ResourceBundle.getBundle(PackageUtil.getPackageName(this.getClass()) + ".elementsNames");
+        FIRST_COLUMN_NAME = rb.getString("TablePart.first.column.name");
+        SECOND_COLUMN_NAME = rb.getString("TablePart.second.column.name");
+        THIRD_COLUMN_NAME = rb.getString("TablePart.third.column.name");
+    }
 
     public TablePart() {
-        
+        data = new PersonService();
     }
 
     @Override
@@ -43,15 +60,13 @@ public class TablePart extends ViewPart {
         table.setLinesVisible(true);
 
         tableViewer.setContentProvider(new ArrayContentProvider());
-//        tableViewer.setInput(dataService.getData());
-        tableViewer.setInput(new java.util.ArrayList<Person>());
+        tableViewer.setInput(data.getData());
 
     }
     
     private void createColumns(Composite parent, TableViewer viewer) {
 
-//        TableViewerColumn column1 = createTableViewerColumn(FIRST_COLUMN_NAME, 200, 0);
-        TableViewerColumn column1 = createTableViewerColumn("Name", 200, 0);
+        TableViewerColumn column1 = createTableViewerColumn(FIRST_COLUMN_NAME, 200, 0);
 //        nameEditingSupport = new NameEditingSupport(tableViewer);
 //        column1.setEditingSupport(nameEditingSupport);
         column1.setLabelProvider(new ColumnLabelProvider() {
@@ -62,8 +77,7 @@ public class TablePart extends ViewPart {
             }
         });
 
-//        TableViewerColumn column2 = createTableViewerColumn(SECOND_COLUMN_NAME, 100, 1);
-        TableViewerColumn column2 = createTableViewerColumn("Group", 100, 1);
+        TableViewerColumn column2 = createTableViewerColumn(SECOND_COLUMN_NAME, 100, 1);
         column2.setLabelProvider(new ColumnLabelProvider() {
             @Override
             public String getText(Object element) {
@@ -72,8 +86,7 @@ public class TablePart extends ViewPart {
             }
         });
 
-//        TableViewerColumn column3 = createTableViewerColumn(THIRD_COLUMN_NAME, 100, 2);
-        TableViewerColumn column3 = createTableViewerColumn("Task done", 100, 2);
+        TableViewerColumn column3 = createTableViewerColumn(THIRD_COLUMN_NAME, 100, 2);
         column3.setLabelProvider(new ColumnLabelProvider() {
             @Override
             public String getText(Object element) {
