@@ -2,6 +2,7 @@ package rcp.taskholder.view;
 
 import java.util.ResourceBundle;
 
+import org.eclipse.core.commands.operations.IUndoContext;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -15,6 +16,11 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.IWorkbenchCommandConstants;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.actions.ActionFactory;
+import org.eclipse.ui.operations.RedoActionHandler;
+import org.eclipse.ui.operations.UndoActionHandler;
 import org.eclipse.ui.part.ViewPart;
 
 import rcp.taskholder.model.Person;
@@ -51,6 +57,17 @@ public class TablePart extends ViewPart {
     public void createPartControl(Composite parent) {
         buildAndLayoutTable(parent);
         addRowSelectionEvent();
+        
+        
+        IUndoContext undoContext = PlatformUI.getWorkbench().getOperationSupport().getUndoContext();
+        UndoActionHandler undoAction = new UndoActionHandler(getSite(), undoContext);
+        undoAction.setActionDefinitionId(IWorkbenchCommandConstants.EDIT_UNDO);
+        
+        RedoActionHandler redoAction = new RedoActionHandler(getSite(), undoContext);
+        redoAction.setActionDefinitionId(IWorkbenchCommandConstants.EDIT_REDO);
+        
+        getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.UNDO.getId(), undoAction);
+        getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.REDO.getId(), redoAction);
     }
 
     @Override

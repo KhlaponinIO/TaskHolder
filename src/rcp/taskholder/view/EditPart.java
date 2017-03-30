@@ -2,6 +2,7 @@ package rcp.taskholder.view;
 
 import java.util.ResourceBundle;
 
+import org.eclipse.core.commands.operations.IUndoContext;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -9,7 +10,12 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.IWorkbenchCommandConstants;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.handlers.IHandlerService;
+import org.eclipse.ui.operations.RedoActionHandler;
+import org.eclipse.ui.operations.UndoActionHandler;
 import org.eclipse.ui.part.ViewPart;
 
 import rcp.taskholder.util.ApplicationScope;
@@ -58,6 +64,16 @@ public class EditPart extends ViewPart {
     @Override
     public void createPartControl(Composite parent) {
         createFieldsAndButtons(parent);
+        
+        IUndoContext undoContext = PlatformUI.getWorkbench().getOperationSupport().getUndoContext();
+        UndoActionHandler undoAction = new UndoActionHandler(getSite(), undoContext);
+        undoAction.setActionDefinitionId(IWorkbenchCommandConstants.EDIT_UNDO);
+        
+        RedoActionHandler redoAction = new RedoActionHandler(getSite(), undoContext);
+        redoAction.setActionDefinitionId(IWorkbenchCommandConstants.EDIT_REDO);
+        
+        getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.UNDO.getId(), undoAction);
+        getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.REDO.getId(), redoAction);
     }
 
     @Override

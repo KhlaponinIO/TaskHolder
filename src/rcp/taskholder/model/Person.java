@@ -13,6 +13,12 @@ public class Person {
         this.taskDone = taskIsDone;
     }
     
+    public Person(Person person) {
+    	this.name = person.getName();
+    	this.group = person.getGroup();
+    	this.taskDone = person.isTaskDone();
+    }
+    
     public Person() {
         this.name = "--empty--";
         this.group = "-1";

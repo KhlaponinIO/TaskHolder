@@ -34,6 +34,14 @@ public interface DataProvider {
      * @return <code>true</code> if deletion success and <code>false</code> if not
      */
     public boolean deleteRow(int index);
+    
+    /**
+     * Deletes the current person from the list
+     * 
+     * @param person
+     * @return <code>true</code> if deletion success and <code>false</code> if not
+     */
+    public boolean deleteRow(Person person);
 
     /**
      * Add the row of data to the list
@@ -61,4 +69,6 @@ public interface DataProvider {
      * @return
      */
     public boolean update(int index, Person rowData);
+    
+    public boolean setRow(int index, Person rowData);
 }

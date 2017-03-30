@@ -47,6 +47,16 @@ public class PersonService {
     public boolean deleteRow(int index) {
         return provider.deleteRow(index);
     }
+    
+    /**
+     * Deletes the current person from the list
+     * 
+     * @param person
+     * @return <code>true</code> if deletion success and <code>false</code> if not
+     */
+    public boolean deleteRow(Person person) {
+    	return provider.deleteRow(person);
+    }
 
     /**
      * Adds the row (instance of <code>Person</code>) to the list using <code>DataProvider</code>
@@ -89,6 +99,10 @@ public class PersonService {
      */
     public void setDataFromFile(String filePath) {
         provider.setData(filePath);
+    }
+    
+    public void setRow(int index, Person person) {
+    	provider.setRow(index, person);
     }
 
 }
