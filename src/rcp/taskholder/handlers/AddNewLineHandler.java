@@ -3,26 +3,24 @@ package rcp.taskholder.handlers;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.core.commands.operations.AbstractOperation;
+import org.eclipse.core.commands.operations.IOperationHistory;
+import org.eclipse.ui.PlatformUI;
 
-import rcp.taskholder.model.Person;
-import rcp.taskholder.services.PersonService;
-import rcp.taskholder.util.ApplicationScope;
+import rcp.taskholder.operations.AddNewLineOperation;
 
 public class AddNewLineHandler extends AbstractHandler {
     
-    private PersonService service;
-    private ApplicationScope scope;
-    
-    {
-        service = new PersonService();
-        scope = ApplicationScope.getInstance();
-    }
 
     @Override
     public Object execute(ExecutionEvent event) throws ExecutionException {
-        service.addRow(new Person());
-        ((TableViewer) scope.getElement("tableViewer")).refresh();
+    	
+    	IOperationHistory history = PlatformUI.getWorkbench().getOperationSupport().getOperationHistory();
+		AbstractOperation addNewLineOperation = new AddNewLineOperation("Add New Line Operation");
+		
+		addNewLineOperation.addContext(PlatformUI.getWorkbench().getOperationSupport().getUndoContext());
+		history.execute(addNewLineOperation, null, null);
+    	
         return null;
     }
 
