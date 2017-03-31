@@ -33,6 +33,12 @@
             name="EditPart"
             restorable="true">
       </view>
+      <view
+            class="rcp.taskholder.view.TreePart"
+            id="rcp.taskholder.view.TreePart"
+            name="TreePart"
+            restorable="true">
+      </view>
    </extension>
    <extension
          point="org.eclipse.ui.commands">
@@ -113,6 +119,10 @@
             id="rcp.taskholder.cancel"
             name="Cancel">
       </command>
+      <command
+            id="rcp.taskholder.openTree"
+            name="Open tree">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
@@ -168,6 +178,10 @@
       <handler
             class="rcp.taskholder.handlers.CancelHandler"
             commandId="rcp.taskholder.cancel">
+      </handler>
+      <handler
+            class="rcp.taskholder.handlers.OpenTreeHandler"
+            commandId="rcp.taskholder.openTree">
       </handler>
    </extension>
    <extension
@@ -228,6 +242,15 @@
             <command
                   commandId="rcp.taskholder.delete"
                   label="Delete"
+                  style="push">
+            
+            </command>
+         </menu>
+         <menu
+               label="View">
+            <command
+                  commandId="rcp.taskholder.openTree"
+                  label="Show tree"
                   style="push">
             </command>
          </menu>
