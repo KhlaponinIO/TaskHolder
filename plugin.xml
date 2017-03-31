@@ -180,6 +180,7 @@
                label="File">
             <command
                   commandId="rcp.taskholder.saveFile"
+                  icon="icons/save_icon.png"
                   label="Save file"
                   style="push">
             </command>
@@ -190,6 +191,7 @@
             </command>
             <command
                   commandId="rcp.taskholder.openFile"
+                  icon="icons/icon-folder-128.png"
                   label="Open..."
                   style="push">
             </command>
@@ -204,22 +206,22 @@
                id="rcp.taskholder.menu.edit"
                label="Edit">
             <command
-                  commandId="rcp.taskholder.undo"
+                  commandId="org.eclipse.ui.edit.undo"
                   label="Undo"
                   style="push">
             </command>
             <command
-                  commandId="rcp.taskholder.redo"
+                  commandId="org.eclipse.ui.edit.redo"
                   label="Redo"
                   style="push">
             </command>
             <command
-                  commandId="rcp.taskholder.copy"
+                  commandId="org.eclipse.ui.edit.copy"
                   label="Copy"
                   style="push">
             </command>
             <command
-                  commandId="rcp.taskholder.paste"
+                  commandId="org.eclipse.ui.edit.paste"
                   label="Paste"
                   style="push">
             </command>
@@ -247,12 +249,12 @@
                id="rcp.taskholder.toolbar">
             <command
                   commandId="rcp.taskholder.addNewLine"
-                  icon="icons/eclipse32.png"
+                  icon="icons/new_file_icon.png"
                   style="push">
             </command>
             <command
                   commandId="rcp.taskholder.saveRow"
-                  icon="icons/eclipse512.png"
+                  icon="icons/save-icon_36x36.png"
                   style="push">
             </command>
             <command
@@ -281,6 +283,24 @@
             </command>
          </toolbar>
       </menuContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.bindings">
+      <key
+            commandId="rcp.taskholder.exit"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="M1+X">
+      </key>
+      <key
+            commandId="rcp.taskholder.openFile"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="M1+O">
+      </key>
+      <key
+            commandId="rcp.taskholder.delete"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="M1+D">
+      </key>
    </extension>
 
 </plugin>

@@ -19,10 +19,13 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbenchCommandConstants;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
+import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.operations.RedoActionHandler;
 import org.eclipse.ui.operations.UndoActionHandler;
 import org.eclipse.ui.part.ViewPart;
 
+import rcp.taskholder.handlers.CopyHandler;
+import rcp.taskholder.handlers.PasteHandler;
 import rcp.taskholder.model.Person;
 import rcp.taskholder.services.PersonService;
 import rcp.taskholder.util.ApplicationScope;
@@ -60,6 +63,7 @@ public class TablePart extends ViewPart {
         
         
         IUndoContext undoContext = PlatformUI.getWorkbench().getOperationSupport().getUndoContext();
+        
         UndoActionHandler undoAction = new UndoActionHandler(getSite(), undoContext);
         undoAction.setActionDefinitionId(IWorkbenchCommandConstants.EDIT_UNDO);
         
@@ -68,6 +72,12 @@ public class TablePart extends ViewPart {
         
         getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.UNDO.getId(), undoAction);
         getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.REDO.getId(), redoAction);
+        
+        IHandlerService handlerService = (IHandlerService) getSite().getService(IHandlerService.class);
+        CopyHandler copyHandler = new CopyHandler();
+        PasteHandler pasteHandler = new PasteHandler();
+        handlerService.activateHandler(org.eclipse.ui.IWorkbenchCommandConstants.EDIT_COPY, copyHandler);
+        handlerService.activateHandler(org.eclipse.ui.IWorkbenchCommandConstants.EDIT_PASTE, pasteHandler);
     }
 
     @Override

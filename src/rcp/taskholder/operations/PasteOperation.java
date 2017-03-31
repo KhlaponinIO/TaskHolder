@@ -12,12 +12,12 @@ import rcp.taskholder.model.Person;
 import rcp.taskholder.services.PersonService;
 import rcp.taskholder.util.ApplicationScope;
 
-public class DeleteOperation extends AbstractOperation {
+public class PasteOperation extends AbstractOperation {
 	
 	private PersonService service;
 	private ApplicationScope scope;
-	
-	private Person storagePerson;
+
+	private Person clipboardPerson;
 	private int storageIndex = -1;
 
 	{
@@ -25,31 +25,31 @@ public class DeleteOperation extends AbstractOperation {
 		scope = ApplicationScope.getInstance();
 	}
 	
-	public DeleteOperation(String login) {
+	public PasteOperation(String login) {
 		super(login);
 	}
-	
+
 	@Override
 	public IStatus execute(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
-		int index = ((TableViewer) scope.getElement("tableViewer")).getTable().getSelectionIndex();
-		if (index < 0) {
+		try {
+			clipboardPerson = (Person) scope.getElement("clipboardPerson");
+
+			if (clipboardPerson != null) {
+				service.addRow(clipboardPerson);
+				storageIndex = service.getData().lastIndexOf(clipboardPerson);
+				((TableViewer) scope.getElement("tableViewer")).refresh();
+			}
+		} catch (ClassCastException e) {
+			System.err.println(e.getMessage());
 			return Status.CANCEL_STATUS;
 		}
-		storagePerson = new Person(service.getRow(index));
-		storageIndex = index;
-		service.deleteRow(index);
-		((TableViewer) scope.getElement("tableViewer")).refresh();
 		return Status.OK_STATUS;
 	}
 
 	@Override
 	public IStatus redo(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
-		if (storageIndex < 0) {
-			return Status.CANCEL_STATUS;
-		}
-		service.deleteRow(storageIndex);
-		((TableViewer) scope.getElement("tableViewer")).refresh();
-		return Status.OK_STATUS;
+		
+		return execute(monitor, info);
 	}
 
 	@Override
@@ -57,9 +57,10 @@ public class DeleteOperation extends AbstractOperation {
 		if (storageIndex < 0) {
 			return Status.CANCEL_STATUS;
 		}
-		service.setRow(storageIndex, storagePerson);
+		service.deleteRow(storageIndex);
 		((TableViewer) scope.getElement("tableViewer")).refresh();
+		
 		return Status.OK_STATUS;
 	}
-
+	
 }

@@ -3,6 +3,7 @@ package rcp.taskholder.view;
 import java.util.ResourceBundle;
 
 import org.eclipse.core.commands.operations.IUndoContext;
+import org.eclipse.core.commands.operations.ObjectUndoContext;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -66,10 +67,12 @@ public class EditPart extends ViewPart {
         createFieldsAndButtons(parent);
         
         IUndoContext undoContext = PlatformUI.getWorkbench().getOperationSupport().getUndoContext();
-        UndoActionHandler undoAction = new UndoActionHandler(getSite(), undoContext);
+        ObjectUndoContext editorUndoContext = new ObjectUndoContext(undoContext);
+        
+        UndoActionHandler undoAction = new UndoActionHandler(getSite(), editorUndoContext);
         undoAction.setActionDefinitionId(IWorkbenchCommandConstants.EDIT_UNDO);
         
-        RedoActionHandler redoAction = new RedoActionHandler(getSite(), undoContext);
+        RedoActionHandler redoAction = new RedoActionHandler(getSite(), editorUndoContext);
         redoAction.setActionDefinitionId(IWorkbenchCommandConstants.EDIT_REDO);
         
         getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.UNDO.getId(), undoAction);
@@ -123,7 +126,6 @@ public class EditPart extends ViewPart {
 
         addButtons(composite);
         addButtonsListeners();
-//        addTextFieldsListeners();
         
         //add data to scope
         scope.putElement("nameTextField", nameTextField);
