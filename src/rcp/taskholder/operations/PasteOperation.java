@@ -7,8 +7,10 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.TreeViewer;
 
 import rcp.taskholder.model.Person;
+import rcp.taskholder.repository.GroupDataProvider;
 import rcp.taskholder.services.PersonService;
 import rcp.taskholder.util.ApplicationScope;
 
@@ -37,7 +39,7 @@ public class PasteOperation extends AbstractOperation {
 			if (clipboardPerson != null) {
 				service.addRow(clipboardPerson);
 				storageIndex = service.getData().lastIndexOf(clipboardPerson);
-				((TableViewer) scope.getElement("tableViewer")).refresh();
+				refresh();
 			}
 		} catch (ClassCastException e) {
 			System.err.println(e.getMessage());
@@ -48,8 +50,8 @@ public class PasteOperation extends AbstractOperation {
 
 	@Override
 	public IStatus redo(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
-		
-		return execute(monitor, info);
+		execute(monitor, info);
+		return Status.OK_STATUS;
 	}
 
 	@Override
@@ -58,9 +60,22 @@ public class PasteOperation extends AbstractOperation {
 			return Status.CANCEL_STATUS;
 		}
 		service.deleteRow(storageIndex);
-		((TableViewer) scope.getElement("tableViewer")).refresh();
+		refresh();
 		
 		return Status.OK_STATUS;
+	}
+	
+	private void refresh() {
+		TableViewer tableViewer = ((TableViewer) scope.getElement("tableViewer"));
+        TreeViewer treeViewer = ((TreeViewer) scope.getElement("treeViewer"));
+        
+        if (tableViewer != null) {
+        	tableViewer.refresh();
+        }
+        if (treeViewer != null) {
+        	GroupDataProvider.getInstance().update();
+        	treeViewer.refresh();
+        }
 	}
 	
 }

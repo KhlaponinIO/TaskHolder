@@ -7,10 +7,12 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Text;
 
 import rcp.taskholder.model.Person;
+import rcp.taskholder.repository.GroupDataProvider;
 import rcp.taskholder.services.PersonService;
 import rcp.taskholder.util.ApplicationScope;
 
@@ -48,7 +50,7 @@ public class SaveRowOperation extends AbstractOperation {
                 groupTextField.getText(), checkTaskButton.getSelection());
         service.updateRow(index, updatedPerson);
         
-        ((TableViewer) scope.getElement("tableViewer")).refresh();
+        refresh();
         
 		return Status.OK_STATUS;
 	}
@@ -59,7 +61,7 @@ public class SaveRowOperation extends AbstractOperation {
 			return Status.CANCEL_STATUS;
 		}
 		service.updateRow(storageIndex, updatedPerson);
-		((TableViewer) scope.getElement("tableViewer")).refresh();
+		refresh();
 		return Status.OK_STATUS;
 	}
 
@@ -69,8 +71,21 @@ public class SaveRowOperation extends AbstractOperation {
 			return Status.CANCEL_STATUS;
 		}
 		service.updateRow(storageIndex, storagePerson);
-		((TableViewer) scope.getElement("tableViewer")).refresh();
+		refresh();
 		return Status.OK_STATUS;
+	}
+	
+	private void refresh() {
+		TableViewer tableViewer = ((TableViewer) scope.getElement("tableViewer"));
+        TreeViewer treeViewer = ((TreeViewer) scope.getElement("treeViewer"));
+        
+        if (tableViewer != null) {
+        	tableViewer.refresh();
+        }
+        if (treeViewer != null) {
+        	GroupDataProvider.getInstance().update();
+        	treeViewer.refresh();
+        }
 	}
 	
 }

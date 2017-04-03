@@ -181,7 +181,8 @@ public class EditPart extends ViewPart {
         try {
             handlerService.executeCommand(command, null);
         } catch (Exception e) {
-            throw new RuntimeException("command " + command + " not found");
+//            throw new RuntimeException("command " + command + " not found");
+        	e.printStackTrace();
         }
     }
 

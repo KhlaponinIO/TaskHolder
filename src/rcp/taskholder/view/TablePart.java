@@ -175,4 +175,10 @@ public class TablePart extends ViewPart {
         }
     }
     
+    @Override
+    public void dispose() {
+    	scope.clearElement("tableViewer");
+    	super.dispose();
+    }
+    
 }

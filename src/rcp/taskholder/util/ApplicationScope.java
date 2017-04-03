@@ -28,4 +28,8 @@ public class ApplicationScope {
     public void putElement(String key, Object value) {
         scope.put(key, value);
     }
+    
+    public void clearElement(String key) {
+    	scope.remove(key);
+    }
 }
