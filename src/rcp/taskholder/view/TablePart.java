@@ -104,8 +104,6 @@ public class TablePart extends ViewPart {
     private void createColumns(Composite parent, TableViewer viewer) {
 
         TableViewerColumn column1 = createTableViewerColumn(FIRST_COLUMN_NAME, 200, 0);
-//        nameEditingSupport = new NameEditingSupport(tableViewer);
-//        column1.setEditingSupport(nameEditingSupport);
         column1.setLabelProvider(new ColumnLabelProvider() {
             @Override
             public String getText(Object element) {

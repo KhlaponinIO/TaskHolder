@@ -3,9 +3,12 @@ package rcp.taskholder.repository;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.jface.viewers.TreeViewer;
+
 import rcp.taskholder.model.Group;
 import rcp.taskholder.model.Person;
 import rcp.taskholder.services.PersonService;
+import rcp.taskholder.util.ApplicationScope;
 
 public class GroupDataProvider {
 
@@ -24,10 +27,10 @@ public class GroupDataProvider {
 		groupsData = new ArrayList<>();
 		fillGroupsData();
 	}
-	
+
 	private void fillGroupsData() {
 		List<Person> persons = personService.getData();
-		
+
 		for (Person person : persons) {
 			String groupNumber = person.getGroup();
 			Group currentGroup = new Group(Integer.parseInt(groupNumber));
@@ -35,18 +38,21 @@ public class GroupDataProvider {
 				groupsData.add(currentGroup);
 			}
 			if (groupsData.contains(currentGroup)) {
-				groupsData.get(groupsData.indexOf(currentGroup)).setStudent(person);
+				groupsData.get(groupsData.lastIndexOf(currentGroup)).setStudent(person);
 			}
 		}
 	}
-	
+
 	public void update() {
 		groupsData.clear();
 		fillGroupsData();
+		TreeViewer treeViewer = ((TreeViewer) ApplicationScope.getInstance().getElement("treeViewer"));
+		if (treeViewer != null) {
+			treeViewer.refresh();
+			treeViewer.expandAll();
+		}
 	}
-	
-	
-	
+
 	public List<Group> getGroupsData() {
 		return groupsData;
 	}

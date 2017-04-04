@@ -8,6 +8,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.swt.widgets.TreeItem;
 
 import rcp.taskholder.model.Person;
 import rcp.taskholder.repository.GroupDataProvider;
@@ -15,25 +16,31 @@ import rcp.taskholder.services.PersonService;
 import rcp.taskholder.util.ApplicationScope;
 
 public class DeleteOperation extends AbstractOperation {
-	
+
 	private PersonService service;
 	private ApplicationScope scope;
-	
+
 	private Person storagePerson;
 	private int storageIndex = -1;
+
+	TableViewer tableViewer;
+	TreeViewer treeViewer;
 
 	{
 		service = new PersonService();
 		scope = ApplicationScope.getInstance();
+
+		tableViewer = ((TableViewer) scope.getElement("tableViewer"));
+		treeViewer = ((TreeViewer) scope.getElement("treeViewer"));
 	}
-	
+
 	public DeleteOperation(String login) {
 		super(login);
 	}
-	
+
 	@Override
 	public IStatus execute(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
-		int index = ((TableViewer) scope.getElement("tableViewer")).getTable().getSelectionIndex();
+		int index = getSelectionIndex();
 		if (index < 0) {
 			return Status.CANCEL_STATUS;
 		}
@@ -65,15 +72,33 @@ public class DeleteOperation extends AbstractOperation {
 	}
 
 	private void refresh() {
-		TableViewer tableViewer = ((TableViewer) scope.getElement("tableViewer"));
-        TreeViewer treeViewer = ((TreeViewer) scope.getElement("treeViewer"));
-        
-        if (tableViewer != null) {
-        	tableViewer.refresh();
-        }
-        if (treeViewer != null) {
-        	GroupDataProvider.getInstance().update();
-        	treeViewer.refresh();
-        }
+
+		if (tableViewer != null) {
+			tableViewer.refresh();
+		}
+		if (treeViewer != null) {
+			GroupDataProvider.getInstance().update();
+//			treeViewer.refresh();
+		}
+	}
+
+	private int getSelectionIndex() {
+		int index = -1;
+
+		if (tableViewer != null) {
+			index = tableViewer.getTable().getSelectionIndex();
+		} else if (treeViewer != null) {
+			TreeItem[] treeItem = treeViewer.getTree().getSelection();
+			if (treeItem.length > 0) {
+				Object element = treeItem[0].getData();
+				if (element == null) {
+					return -1;
+				} else if (element instanceof Person) {
+					return service.getData().indexOf((Person) element);
+				}
+			}
+		}
+
+		return index;
 	}
 }

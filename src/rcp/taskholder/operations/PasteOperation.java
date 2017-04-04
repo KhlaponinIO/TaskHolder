@@ -74,7 +74,6 @@ public class PasteOperation extends AbstractOperation {
         }
         if (treeViewer != null) {
         	GroupDataProvider.getInstance().update();
-        	treeViewer.refresh();
         }
 	}
 	

@@ -31,16 +31,19 @@ public class TreeContentProvider implements ITreeContentProvider {
 		}
 		if (element instanceof Person) {
 			int groupNum = Integer.parseInt(((Person) element).getGroup());
-			return groups.get(groupNum);
+			int index = groups.indexOf(new Group(groupNum));
+			if (index > 0) {
+				return groups.get(index);
+			}
 		}
 		return null;
 	}
 
 	@Override
 	public boolean hasChildren(Object element) {
-		//check it
+		// check it
 		return element instanceof Group;
-		
+
 	}
 
 }

@@ -251,7 +251,7 @@
             <command
                   commandId="rcp.taskholder.openTree"
                   label="Show tree"
-                  style="push">
+                  style="toggle">
             </command>
          </menu>
          <menu
@@ -282,7 +282,7 @@
             </command>
             <command
                   commandId="rcp.taskholder.delete"
-                  icon="icons/eclipse256.png"
+                  icon="icons/delete.png"
                   style="push">
             </command>
             <command

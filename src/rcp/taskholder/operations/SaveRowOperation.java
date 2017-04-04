@@ -10,6 +10,7 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.TreeItem;
 
 import rcp.taskholder.model.Person;
 import rcp.taskholder.repository.GroupDataProvider;
@@ -25,9 +26,15 @@ public class SaveRowOperation extends AbstractOperation {
     private Person updatedPerson;
     private int storageIndex = -1;
     
+    TableViewer tableViewer;
+    TreeViewer treeViewer;
+    
     {
         service = new PersonService();
         scope = ApplicationScope.getInstance();
+        
+        tableViewer = ((TableViewer) scope.getElement("tableViewer"));
+        treeViewer = ((TreeViewer) scope.getElement("treeViewer"));
     }
 
 	public SaveRowOperation(String login) {
@@ -41,7 +48,13 @@ public class SaveRowOperation extends AbstractOperation {
         Text groupTextField = (Text) scope.getElement("groupTextField");
         Button checkTaskButton = (Button) scope.getElement("checkTaskButton");
         
-        int index = ((TableViewer) scope.getElement("tableViewer")).getTable().getSelectionIndex();
+        TableViewer tableViewer = (TableViewer) scope.getElement("tableViewer");
+        TreeViewer treeViewer = (TreeViewer) scope.getElement("treeViewer");
+        if (tableViewer == null & treeViewer == null) {
+        	return Status.CANCEL_STATUS;
+        }
+        
+        int index = getSelectionIndex();
         
         storageIndex = index;
         storagePerson = service.getRow(index);
@@ -76,9 +89,6 @@ public class SaveRowOperation extends AbstractOperation {
 	}
 	
 	private void refresh() {
-		TableViewer tableViewer = ((TableViewer) scope.getElement("tableViewer"));
-        TreeViewer treeViewer = ((TreeViewer) scope.getElement("treeViewer"));
-        
         if (tableViewer != null) {
         	tableViewer.refresh();
         }
@@ -86,6 +96,26 @@ public class SaveRowOperation extends AbstractOperation {
         	GroupDataProvider.getInstance().update();
         	treeViewer.refresh();
         }
+	}
+	
+	private int getSelectionIndex() {
+		int index = -1;
+
+		if (tableViewer != null) {
+			index = tableViewer.getTable().getSelectionIndex();
+		} else if (treeViewer != null) {
+			TreeItem[] treeItem = treeViewer.getTree().getSelection();
+			if (treeItem.length > 0) {
+				Object element = treeItem[0].getData();
+				if (element == null) {
+					return -1;
+				} else if (element instanceof Person) {
+					return service.getData().indexOf((Person) element);
+				}
+			}
+		}
+
+		return index;
 	}
 	
 }
