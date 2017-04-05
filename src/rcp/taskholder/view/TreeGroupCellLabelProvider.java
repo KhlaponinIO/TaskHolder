@@ -15,6 +15,11 @@ import org.osgi.framework.FrameworkUtil;
 import rcp.taskholder.model.Group;
 import rcp.taskholder.model.Person;
 
+/**
+ * Realization of <code>IStyledLabelProvider</code> for "Group/Name" column in <code>TreeViewer</code>
+ * 
+ * @author Ihor Khlaponin
+ */
 public class TreeGroupCellLabelProvider extends LabelProvider implements IStyledLabelProvider {
 
     private ImageDescriptor descriptor;

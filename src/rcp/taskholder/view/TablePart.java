@@ -12,6 +12,8 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
@@ -34,13 +36,14 @@ import rcp.taskholder.util.ApplicationScope;
 import rcp.taskholder.util.PackageUtil;
 
 public class TablePart extends ViewPart {
-    
+
     public static final String ID = "rcp.taskholder.view.TablePart";
-    
+
     private TableViewer tableViewer;
     private PersonService data;
     private ApplicationScope scope;
-    
+    private TableViewerComparator comparator;
+
     private ResourceBundle rb;
     private final String FIRST_COLUMN_NAME;
     private final String SECOND_COLUMN_NAME;
@@ -63,18 +66,19 @@ public class TablePart extends ViewPart {
         buildAndLayoutTable(parent);
         addRowSelectionEvent();
         
-        
+        // creating context for undo/redo operations
         IUndoContext undoContext = PlatformUI.getWorkbench().getOperationSupport().getUndoContext();
-        
+
         UndoActionHandler undoAction = new UndoActionHandler(getSite(), undoContext);
         undoAction.setActionDefinitionId(IWorkbenchCommandConstants.EDIT_UNDO);
-        
+
         RedoActionHandler redoAction = new RedoActionHandler(getSite(), undoContext);
         redoAction.setActionDefinitionId(IWorkbenchCommandConstants.EDIT_REDO);
-        
+
         getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.UNDO.getId(), undoAction);
         getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.REDO.getId(), redoAction);
-        
+
+        // instantiate the handler service for copy/paste operations
         IHandlerService handlerService = getSite().getService(IHandlerService.class);
         CopyHandler copyHandler = new CopyHandler();
         PasteHandler pasteHandler = new PasteHandler();
@@ -84,9 +88,9 @@ public class TablePart extends ViewPart {
 
     @Override
     public void setFocus() {
-        
+
     }
-    
+
     private void buildAndLayoutTable(Composite parent) {
 
         tableViewer = new TableViewer(parent, SWT.V_SCROLL | SWT.H_SCROLL | SWT.FULL_SELECTION | SWT.BORDER);
@@ -99,17 +103,22 @@ public class TablePart extends ViewPart {
 
         tableViewer.setContentProvider(new ArrayContentProvider());
         tableViewer.setInput(data.getData());
-        
-        //create a menu manager and create context menu
+
+        // create a menu manager and create context menu
         MenuManager menuManager = new MenuManager();
         Menu menu = menuManager.createContextMenu(tableViewer.getTable());
         tableViewer.getTable().setMenu(menu);
         getSite().registerContextMenu(menuManager, tableViewer); // register the menu with the framework
         getSite().setSelectionProvider(tableViewer); // makes the viewer selection available
+        
+        // set the sorter for the table 
+        comparator = new TableViewerComparator();
+        tableViewer.setComparator(comparator);
 
+        // add tableViwer to the application scope
         scope.putElement("tableViewer", tableViewer);
     }
-    
+
     private void createColumns(Composite parent, TableViewer viewer) {
 
         TableViewerColumn column1 = createTableViewerColumn(FIRST_COLUMN_NAME, 200, 0);
@@ -140,7 +149,7 @@ public class TablePart extends ViewPart {
         });
 
     }
-    
+
     private TableViewerColumn createTableViewerColumn(String title, int bound, int colNumber) {
 
         TableViewerColumn viewerColumn = new TableViewerColumn(tableViewer, SWT.NONE);
@@ -150,10 +159,25 @@ public class TablePart extends ViewPart {
         column.setWidth(bound);
         column.setResizable(true);
         column.setMoveable(true);
+        column.addSelectionListener(getSelectionAdapter(column, colNumber));
 
         return viewerColumn;
     }
     
+    private SelectionAdapter getSelectionAdapter(TableColumn column, int index) {
+        SelectionAdapter selectionAdapter = new SelectionAdapter() {
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+                comparator.setColumn(index);
+                int direction = comparator.getDirection();
+                tableViewer.getTable().setSortDirection(direction);
+                tableViewer.getTable().setSortColumn(column);
+                tableViewer.refresh();
+            }
+        };
+        return selectionAdapter;
+    }
+
     public void addRowSelectionEvent() {
         tableViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 
@@ -161,13 +185,13 @@ public class TablePart extends ViewPart {
             public void selectionChanged(final SelectionChangedEvent event) {
 
                 IStructuredSelection selection = (IStructuredSelection) event.getSelection();
-                showRowDataOnEditBar(selection, (Text) scope.getElement("nameTextField"), 
+                showRowDataOnEditBar(selection, (Text) scope.getElement("nameTextField"),
                         (Text) scope.getElement("groupTextField"), (Button) scope.getElement("checkTaskButton"));
 
             }
         });
     }
-    
+
     private void showRowDataOnEditBar(IStructuredSelection selection, Text nameTextField, Text groupTextField,
             Button checkTaskButton) {
         Person rowData = (Person) selection.getFirstElement();
@@ -181,11 +205,12 @@ public class TablePart extends ViewPart {
             checkTaskButton.setSelection(rowData.isTaskDone());
         }
     }
-    
+
     @Override
     public void dispose() {
-    	scope.clearElement("tableViewer");
-    	super.dispose();
+        // remove TableViewer instance from the application scope and dispose ViewPart
+        scope.clearElement("tableViewer");
+        super.dispose();
     }
-    
+
 }

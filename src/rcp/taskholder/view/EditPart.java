@@ -23,21 +23,20 @@ import rcp.taskholder.util.ApplicationScope;
 import rcp.taskholder.util.PackageUtil;
 
 public class EditPart extends ViewPart {
-    
-    
+
     public static final String ID = "rcp.taskholder.view.EditPart";
-    
+
     private Button newButton;
     private Button saveButton;
     private Button deleteButton;
     private Button cancelButton;
-    
+
     private Text nameTextField;
     private Text groupTextField;
     private Button checkTaskButton;
-    
+
     private ApplicationScope scope;
-    
+
     private ResourceBundle rb;
     private final String NEW_BUTTON_NAME;
     private final String SAVE_BUTTON_NAME;
@@ -46,7 +45,7 @@ public class EditPart extends ViewPart {
     private final String NAME_LABEL;
     private final String GROUP_LABEL;
     private final String TASK_LABEL;
-    
+
     {
         rb = ResourceBundle.getBundle(PackageUtil.getPackageName(this.getClass()) + ".elementsNames");
         NEW_BUTTON_NAME = rb.getString("EditPart.button.new");
@@ -65,25 +64,26 @@ public class EditPart extends ViewPart {
     @Override
     public void createPartControl(Composite parent) {
         createFieldsAndButtons(parent);
-        
+
+        // create undoContext for undo/redo operations
         IUndoContext undoContext = PlatformUI.getWorkbench().getOperationSupport().getUndoContext();
         ObjectUndoContext editorUndoContext = new ObjectUndoContext(undoContext);
-        
+
         UndoActionHandler undoAction = new UndoActionHandler(getSite(), editorUndoContext);
         undoAction.setActionDefinitionId(IWorkbenchCommandConstants.EDIT_UNDO);
-        
+
         RedoActionHandler redoAction = new RedoActionHandler(getSite(), editorUndoContext);
         redoAction.setActionDefinitionId(IWorkbenchCommandConstants.EDIT_REDO);
-        
+
         getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.UNDO.getId(), undoAction);
         getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.REDO.getId(), redoAction);
     }
 
     @Override
     public void setFocus() {
-        //stub
+        // stub
     }
-    
+
     private void createFieldsAndButtons(Composite parent) {
 
         Composite composite = new Composite(parent, SWT.NONE);
@@ -126,8 +126,8 @@ public class EditPart extends ViewPart {
 
         addButtons(composite);
         addButtonsListeners();
-        
-        //add data to scope
+
+        // add data to application scope
         scope.putElement("nameTextField", nameTextField);
         scope.putElement("groupTextField", groupTextField);
         scope.putElement("checkTaskButton", checkTaskButton);
@@ -151,7 +151,7 @@ public class EditPart extends ViewPart {
         cancelButton.setText(CANCEL_BUTTON_NAME);
         cancelButton.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, true));
     }
-    
+
     public void addButtonsListeners() {
         newButton.addListener(SWT.Selection, event -> {
             executeCommand("rcp.taskholder.addNewLine");
@@ -169,20 +169,19 @@ public class EditPart extends ViewPart {
             executeCommand("rcp.taskholder.cancel");
         });
     }
-    
+
     /**
      * Calling the command by id
      * 
      * @param command
      */
     private void executeCommand(String command) {
-        // From a view you get the site which allow to get the service 
+        // From a view you get the site which allow to get the service
         IHandlerService handlerService = getSite().getService(IHandlerService.class);
         try {
             handlerService.executeCommand(command, null);
         } catch (Exception e) {
-//            throw new RuntimeException("command " + command + " not found");
-        	e.printStackTrace();
+            e.printStackTrace();
         }
     }
 

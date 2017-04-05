@@ -15,6 +15,11 @@ import org.eclipse.swt.graphics.Image;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
 
+/**
+ * Realization of <code>IStyledLabelProvider</code> for the "Task done" column in <code>TreeViewer</code>
+ * 
+ * @author Ihor khlaponin
+ */
 public class TaskTreeCellLabelProvider extends LabelProvider implements IStyledLabelProvider {
 
     private ImageDescriptor descriptor;

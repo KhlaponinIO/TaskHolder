@@ -6,6 +6,11 @@ import org.eclipse.jface.viewers.ITreeContentProvider;
 
 import rcp.taskholder.repository.GroupDataProvider;
 
+/**
+ * Instance of <code>ITreeContentProvider</code> for tree content
+ * 
+ * @author Ihor Khlaponin
+ */
 public class TreeContentProvider implements ITreeContentProvider {
 
     ArrayList<Group> groups = (ArrayList<Group>) GroupDataProvider.getInstance().getGroupsData();
