@@ -11,26 +11,26 @@ import rcp.taskholder.services.FileService;
 import rcp.taskholder.services.PersonService;
 
 public class SaveAsFileHandler extends AbstractHandler {
-    
+
     private PersonService service;
-    
+
     {
         service = new PersonService();
     }
 
     @Override
     public Object execute(ExecutionEvent event) throws ExecutionException {
-        
+
         FileDialog fileDialog = new FileDialog(Display.getCurrent().getShells()[0], SWT.SAVE);
         fileDialog.setText("Save as");
         fileDialog.setFilterPath("D:/");
         String[] filterExt = { ".json", ".xml" };
         fileDialog.setFilterExtensions(filterExt);
-        
+
         String path = fileDialog.open();
-        
+
         FileService.saveDataToFile(service.getData(), path);
-        
+
         return null;
     }
 

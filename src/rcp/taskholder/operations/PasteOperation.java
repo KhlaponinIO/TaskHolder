@@ -6,75 +6,63 @@ import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.jface.viewers.TreeViewer;
 
 import rcp.taskholder.model.Person;
-import rcp.taskholder.repository.GroupDataProvider;
 import rcp.taskholder.services.PersonService;
+import rcp.taskholder.services.ViewPartsService;
 import rcp.taskholder.util.ApplicationScope;
 
 public class PasteOperation extends AbstractOperation {
-	
-	private PersonService service;
-	private ApplicationScope scope;
 
-	private Person clipboardPerson;
-	private int storageIndex = -1;
+    private PersonService service;
+    private ApplicationScope scope;
+    private ViewPartsService viewService;
 
-	{
-		service = new PersonService();
-		scope = ApplicationScope.getInstance();
-	}
-	
-	public PasteOperation(String login) {
-		super(login);
-	}
+    private Person clipboardPerson;
+    private int storageIndex = -1;
 
-	@Override
-	public IStatus execute(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
-		try {
-			clipboardPerson = (Person) scope.getElement("clipboardPerson");
+    {
+        service = new PersonService();
+        viewService = new ViewPartsService();
+        scope = ApplicationScope.getInstance();
+    }
 
-			if (clipboardPerson != null) {
-				service.addRow(clipboardPerson);
-				storageIndex = service.getData().lastIndexOf(clipboardPerson);
-				refresh();
-			}
-		} catch (ClassCastException e) {
-			System.err.println(e.getMessage());
-			return Status.CANCEL_STATUS;
-		}
-		return Status.OK_STATUS;
-	}
+    public PasteOperation(String login) {
+        super(login);
+    }
 
-	@Override
-	public IStatus redo(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
-		execute(monitor, info);
-		return Status.OK_STATUS;
-	}
+    @Override
+    public IStatus execute(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
+        try {
+            clipboardPerson = (Person) scope.getElement("clipboardPerson");
 
-	@Override
-	public IStatus undo(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
-		if (storageIndex < 0) {
-			return Status.CANCEL_STATUS;
-		}
-		service.deleteRow(storageIndex);
-		refresh();
-		
-		return Status.OK_STATUS;
-	}
-	
-	private void refresh() {
-		TableViewer tableViewer = ((TableViewer) scope.getElement("tableViewer"));
-        TreeViewer treeViewer = ((TreeViewer) scope.getElement("treeViewer"));
-        
-        if (tableViewer != null) {
-        	tableViewer.refresh();
+            if (clipboardPerson != null) {
+                service.addRow(clipboardPerson);
+                storageIndex = service.getData().lastIndexOf(clipboardPerson);
+                viewService.refresh();
+            }
+        } catch (ClassCastException e) {
+            System.err.println(e.getMessage());
+            return Status.CANCEL_STATUS;
         }
-        if (treeViewer != null) {
-        	GroupDataProvider.getInstance().update();
+        return Status.OK_STATUS;
+    }
+
+    @Override
+    public IStatus redo(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
+        execute(monitor, info);
+        return Status.OK_STATUS;
+    }
+
+    @Override
+    public IStatus undo(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
+        if (storageIndex < 0) {
+            return Status.CANCEL_STATUS;
         }
-	}
-	
+        service.deleteRow(storageIndex);
+        viewService.refresh();
+
+        return Status.OK_STATUS;
+    }
+
 }

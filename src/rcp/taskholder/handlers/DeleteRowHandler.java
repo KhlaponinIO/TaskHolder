@@ -11,17 +11,16 @@ import rcp.taskholder.operations.DeleteOperation;
 
 public class DeleteRowHandler extends AbstractHandler {
 
+    @Override
+    public Object execute(ExecutionEvent event) throws ExecutionException {
 
-	@Override
-	public Object execute(ExecutionEvent event) throws ExecutionException {
+        IOperationHistory history = PlatformUI.getWorkbench().getOperationSupport().getOperationHistory();
+        AbstractOperation deleteOperation = new DeleteOperation("Delete Operation");
 
-		IOperationHistory history = PlatformUI.getWorkbench().getOperationSupport().getOperationHistory();
-		AbstractOperation deleteOperation = new DeleteOperation("Delete Operation");
-		
-		deleteOperation.addContext(PlatformUI.getWorkbench().getOperationSupport().getUndoContext());
-		history.execute(deleteOperation, null, null);
+        deleteOperation.addContext(PlatformUI.getWorkbench().getOperationSupport().getUndoContext());
+        history.execute(deleteOperation, null, null);
 
-		return null;
-	}
+        return null;
+    }
 
 }

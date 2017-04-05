@@ -11,17 +11,16 @@ import rcp.taskholder.operations.PasteOperation;
 
 public class PasteHandler extends AbstractHandler {
 
+    @Override
+    public Object execute(ExecutionEvent event) throws ExecutionException {
 
-	@Override
-	public Object execute(ExecutionEvent event) throws ExecutionException {
+        IOperationHistory history = PlatformUI.getWorkbench().getOperationSupport().getOperationHistory();
+        AbstractOperation pasteOperation = new PasteOperation("PasteOperation");
 
-		IOperationHistory history = PlatformUI.getWorkbench().getOperationSupport().getOperationHistory();
-		AbstractOperation pasteOperation = new PasteOperation("PasteOperation");
-		
-		pasteOperation.addContext(PlatformUI.getWorkbench().getOperationSupport().getUndoContext());
-		history.execute(pasteOperation, null, null);
+        pasteOperation.addContext(PlatformUI.getWorkbench().getOperationSupport().getUndoContext());
+        history.execute(pasteOperation, null, null);
 
-		return null;
-	}
+        return null;
+    }
 
 }

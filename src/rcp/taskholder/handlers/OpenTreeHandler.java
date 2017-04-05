@@ -16,37 +16,37 @@ import rcp.taskholder.view.TreePart;
 
 public class OpenTreeHandler extends AbstractHandler {
 
-	@Override
-	public Object execute(ExecutionEvent event) throws ExecutionException {
+    @Override
+    public Object execute(ExecutionEvent event) throws ExecutionException {
 
-		Event selectionEvent = (Event) event.getTrigger();
-		MenuItem item = (MenuItem) selectionEvent.widget;
+        Event selectionEvent = (Event) event.getTrigger();
+        MenuItem item = (MenuItem) selectionEvent.widget;
 
-		IWorkbenchPage workbenchPage = HandlerUtil.getActiveWorkbenchWindow(event).getActivePage();
-		if (item.getSelection()) {
-			// open tree view part in the current perspective and close the
-			// table view part
-			try {
-				workbenchPage.showView(TreePart.ID);
-				GroupDataProvider.getInstance().update();
-				IViewPart tablePart = workbenchPage.findView(TablePart.ID);
-				workbenchPage.hideView(tablePart);
-			} catch (PartInitException e) {
-				e.printStackTrace();
-			}
-		} else {
-			// open table view part in the current perspective and close the
-			// tree view part
-			IViewPart treePart = workbenchPage.findView(TreePart.ID);
-			workbenchPage.hideView(treePart);
-			try {
-				workbenchPage.showView(TablePart.ID);
-			} catch (PartInitException e) {
-				e.printStackTrace();
-			}
-		}
+        IWorkbenchPage workbenchPage = HandlerUtil.getActiveWorkbenchWindow(event).getActivePage();
+        if (item.getSelection()) {
+            // open tree view part in the current perspective and close the
+            // table view part
+            try {
+                workbenchPage.showView(TreePart.ID);
+                GroupDataProvider.getInstance().update();
+                IViewPart tablePart = workbenchPage.findView(TablePart.ID);
+                workbenchPage.hideView(tablePart);
+            } catch (PartInitException e) {
+                e.printStackTrace();
+            }
+        } else {
+            // open table view part in the current perspective and close the
+            // tree view part
+            IViewPart treePart = workbenchPage.findView(TreePart.ID);
+            workbenchPage.hideView(treePart);
+            try {
+                workbenchPage.showView(TablePart.ID);
+            } catch (PartInitException e) {
+                e.printStackTrace();
+            }
+        }
 
-		return null;
-	}
+        return null;
+    }
 
 }

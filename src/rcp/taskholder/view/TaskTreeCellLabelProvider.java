@@ -17,34 +17,34 @@ import org.osgi.framework.FrameworkUtil;
 
 public class TaskTreeCellLabelProvider extends LabelProvider implements IStyledLabelProvider {
 
-	private ImageDescriptor descriptor;
+    private ImageDescriptor descriptor;
 
-	@Override
-	public Image getImage(Object element) {
-		if (element instanceof Person) {
-			if (((Person) element).isTaskDone()) {
-				descriptor = TaskTreeCellLabelProvider.getImageDescriptor("tick.png");
-			} else {
-				descriptor = TaskTreeCellLabelProvider.getImageDescriptor("cross.png");
-			}
-			Image image = descriptor.createImage();
-			return image;
-		} else {
-			return null;
-		}
-	}
+    @Override
+    public Image getImage(Object element) {
+        if (element instanceof Person) {
+            if (((Person) element).isTaskDone()) {
+                descriptor = TaskTreeCellLabelProvider.getImageDescriptor("tick.png");
+            } else {
+                descriptor = TaskTreeCellLabelProvider.getImageDescriptor("cross.png");
+            }
+            Image image = descriptor.createImage();
+            return image;
+        } else {
+            return null;
+        }
+    }
 
-	private static ImageDescriptor getImageDescriptor(String name) {
+    private static ImageDescriptor getImageDescriptor(String name) {
 
-		String iconPath = "icons/" + name;
-		Bundle bundle = FrameworkUtil.getBundle(TaskTreeCellLabelProvider.class);
-		URL url = FileLocator.find(bundle, new Path(iconPath), null);
-		return ImageDescriptor.createFromURL(url);
-	}
+        String iconPath = "icons/" + name;
+        Bundle bundle = FrameworkUtil.getBundle(TaskTreeCellLabelProvider.class);
+        URL url = FileLocator.find(bundle, new Path(iconPath), null);
+        return ImageDescriptor.createFromURL(url);
+    }
 
-	@Override
-	public StyledString getStyledText(Object element) {
-		return new StyledString("");
-	}
+    @Override
+    public StyledString getStyledText(Object element) {
+        return new StyledString("");
+    }
 
 }

@@ -14,11 +14,10 @@ import rcp.taskholder.services.PersonService;
 import rcp.taskholder.util.ApplicationScope;
 
 public class OpenFileHandler extends AbstractHandler {
-    
+
     private PersonService service;
     private ApplicationScope scope;
-    TableViewer tableViewer;
-    
+
     {
         service = new PersonService();
         scope = ApplicationScope.getInstance();
@@ -26,7 +25,7 @@ public class OpenFileHandler extends AbstractHandler {
 
     @Override
     public Object execute(ExecutionEvent event) throws ExecutionException {
-        
+
         FileDialog fileDialog = new FileDialog(Display.getCurrent().getShells()[0], SWT.OPEN);
         fileDialog.setText("Open");
         fileDialog.setFilterPath("D:/");
@@ -34,27 +33,27 @@ public class OpenFileHandler extends AbstractHandler {
         fileDialog.setFilterExtensions(filterExtensions);
 
         String selected = fileDialog.open();
-        
+
         service.setDataFromFile(selected);
-        tableViewer = (TableViewer) scope.getElement("tableViewer");
-        
+
         refresh();
-        
+
         return null;
     }
-    
+
     private void refresh() {
+        TableViewer tableViewer = (TableViewer) scope.getElement("tableViewer");
         TreeViewer treeViewer = ((TreeViewer) scope.getElement("treeViewer"));
-        
+
         if (tableViewer != null) {
-        	tableViewer.setInput(service.getData());
-        	tableViewer.refresh();
+            tableViewer.setInput(service.getData());
+            tableViewer.refresh();
         }
         if (treeViewer != null) {
-        	GroupDataProvider.getInstance().update();
-        	treeViewer.refresh();
-        	treeViewer.expandAll();
+            GroupDataProvider.getInstance().update();
+            treeViewer.refresh();
+            treeViewer.expandAll();
         }
-	}
+    }
 
 }

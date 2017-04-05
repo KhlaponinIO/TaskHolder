@@ -10,17 +10,16 @@ import org.eclipse.ui.PlatformUI;
 import rcp.taskholder.operations.AddNewLineOperation;
 
 public class AddNewLineHandler extends AbstractHandler {
-    
 
     @Override
     public Object execute(ExecutionEvent event) throws ExecutionException {
-    	
-    	IOperationHistory history = PlatformUI.getWorkbench().getOperationSupport().getOperationHistory();
-		AbstractOperation addNewLineOperation = new AddNewLineOperation("Add New Line Operation");
-		
-		addNewLineOperation.addContext(PlatformUI.getWorkbench().getOperationSupport().getUndoContext());
-		history.execute(addNewLineOperation, null, null);
-    	
+
+        IOperationHistory history = PlatformUI.getWorkbench().getOperationSupport().getOperationHistory();
+        AbstractOperation addNewLineOperation = new AddNewLineOperation("Add New Line Operation");
+
+        addNewLineOperation.addContext(PlatformUI.getWorkbench().getOperationSupport().getUndoContext());
+        history.execute(addNewLineOperation, null, null);
+
         return null;
     }
 

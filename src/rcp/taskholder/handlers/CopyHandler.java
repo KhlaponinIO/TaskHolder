@@ -3,35 +3,37 @@ package rcp.taskholder.handlers;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.jface.viewers.TableViewer;
 
 import rcp.taskholder.model.Person;
 import rcp.taskholder.services.PersonService;
+import rcp.taskholder.services.ViewPartsService;
 import rcp.taskholder.util.ApplicationScope;
 
 public class CopyHandler extends AbstractHandler {
 
-	private PersonService data;
-	private ApplicationScope scope;
+    private PersonService service;
+    private ApplicationScope scope;
+    private ViewPartsService viewService;
 
-	private Person clipboardPerson;
+    private Person clipboardPerson;
 
-	{
-		data = new PersonService();
-		scope = ApplicationScope.getInstance();
-	}
+    {
+        service = new PersonService();
+        viewService = new ViewPartsService();
+        scope = ApplicationScope.getInstance();
+    }
 
-	@Override
-	public Object execute(ExecutionEvent event) throws ExecutionException {
+    @Override
+    public Object execute(ExecutionEvent event) throws ExecutionException {
 
-		int index = ((TableViewer) scope.getElement("tableViewer")).getTable().getSelectionIndex();
+        int index = viewService.getSelectionIndex();
 
-		if (index >= 0) {
-			clipboardPerson = data.getRow(index);
-			scope.putElement("clipboardPerson", clipboardPerson);
-		}
+        if (index >= 0) {
+            clipboardPerson = service.getRow(index);
+            scope.putElement("clipboardPerson", clipboardPerson);
+        }
 
-		return null;
-	}
+        return null;
+    }
 
 }

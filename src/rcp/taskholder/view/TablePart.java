@@ -3,6 +3,7 @@ package rcp.taskholder.view;
 import java.util.ResourceBundle;
 
 import org.eclipse.core.commands.operations.IUndoContext;
+import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -13,6 +14,7 @@ import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
@@ -73,7 +75,7 @@ public class TablePart extends ViewPart {
         getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.UNDO.getId(), undoAction);
         getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.REDO.getId(), redoAction);
         
-        IHandlerService handlerService = (IHandlerService) getSite().getService(IHandlerService.class);
+        IHandlerService handlerService = getSite().getService(IHandlerService.class);
         CopyHandler copyHandler = new CopyHandler();
         PasteHandler pasteHandler = new PasteHandler();
         handlerService.activateHandler(org.eclipse.ui.IWorkbenchCommandConstants.EDIT_COPY, copyHandler);
@@ -97,8 +99,15 @@ public class TablePart extends ViewPart {
 
         tableViewer.setContentProvider(new ArrayContentProvider());
         tableViewer.setInput(data.getData());
-        scope.putElement("tableViewer", tableViewer);
+        
+        //create a menu manager and create context menu
+        MenuManager menuManager = new MenuManager();
+        Menu menu = menuManager.createContextMenu(tableViewer.getTable());
+        tableViewer.getTable().setMenu(menu);
+        getSite().registerContextMenu(menuManager, tableViewer); // register the menu with the framework
+        getSite().setSelectionProvider(tableViewer); // makes the viewer selection available
 
+        scope.putElement("tableViewer", tableViewer);
     }
     
     private void createColumns(Composite parent, TableViewer viewer) {

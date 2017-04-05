@@ -17,38 +17,37 @@ import rcp.taskholder.model.Person;
 
 public class TreeGroupCellLabelProvider extends LabelProvider implements IStyledLabelProvider {
 
-	private ImageDescriptor descriptor;
+    private ImageDescriptor descriptor;
 
-	@Override
-	public Image getImage(Object element) {
-		if (element instanceof Person) {
-			descriptor = TreeGroupCellLabelProvider.getImageDescriptor("eclipse16.png");
-			Image image = descriptor.createImage();
-			return image;
-		} else {
-			return null;
-		}
-	}
+    @Override
+    public Image getImage(Object element) {
+        if (element instanceof Person) {
+            descriptor = TreeGroupCellLabelProvider.getImageDescriptor("eclipse16.png");
+            Image image = descriptor.createImage();
+            return image;
+        } else {
+            return null;
+        }
+    }
 
-	private static ImageDescriptor getImageDescriptor(String name) {
+    private static ImageDescriptor getImageDescriptor(String name) {
 
-		String iconPath = "icons/" + name;
-		Bundle bundle = FrameworkUtil.getBundle(TreeGroupCellLabelProvider.class);
-		URL url = FileLocator.find(bundle, new Path(iconPath), null);
-		return ImageDescriptor.createFromURL(url);
-	}
+        String iconPath = "icons/" + name;
+        Bundle bundle = FrameworkUtil.getBundle(TreeGroupCellLabelProvider.class);
+        URL url = FileLocator.find(bundle, new Path(iconPath), null);
+        return ImageDescriptor.createFromURL(url);
+    }
 
-	@Override
-	public StyledString getStyledText(Object element) {
-		// TODO Auto-generated method stub
-		if (element instanceof Group) {
-			return new StyledString("Group #" + element);
-		}
-		if (element instanceof Person) {
-			return new StyledString(((Person) element).getName());
-		}
+    @Override
+    public StyledString getStyledText(Object element) {
+        if (element instanceof Group) {
+            return new StyledString("Group #" + element);
+        }
+        if (element instanceof Person) {
+            return new StyledString(((Person) element).getName());
+        }
 
-		return null;
-	}
+        return null;
+    }
 
 }

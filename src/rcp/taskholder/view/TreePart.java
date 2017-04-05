@@ -1,6 +1,7 @@
 package rcp.taskholder.view;
 
 import org.eclipse.core.commands.operations.IUndoContext;
+import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -10,15 +11,19 @@ import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.ui.IWorkbenchCommandConstants;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
+import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.operations.RedoActionHandler;
 import org.eclipse.ui.operations.UndoActionHandler;
 import org.eclipse.ui.part.ViewPart;
 
+import rcp.taskholder.handlers.CopyHandler;
+import rcp.taskholder.handlers.PasteHandler;
 import rcp.taskholder.model.Person;
 import rcp.taskholder.model.TreeContentProvider;
 import rcp.taskholder.repository.GroupDataProvider;
@@ -51,6 +56,11 @@ public class TreePart extends ViewPart {
 		getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.UNDO.getId(), undoAction);
 		getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.REDO.getId(), redoAction);
 
+		IHandlerService handlerService = getSite().getService(IHandlerService.class);
+        CopyHandler copyHandler = new CopyHandler();
+        PasteHandler pasteHandler = new PasteHandler();
+        handlerService.activateHandler(org.eclipse.ui.IWorkbenchCommandConstants.EDIT_COPY, copyHandler);
+        handlerService.activateHandler(org.eclipse.ui.IWorkbenchCommandConstants.EDIT_PASTE, pasteHandler);
 	}
 
 	private void instantiateTreeViewer(Composite parent) {
@@ -74,6 +84,13 @@ public class TreePart extends ViewPart {
 		treeViewer.setInput(GroupDataProvider.getInstance().getGroupsData());
 		treeViewer.expandAll();
 		addItemSelectionEvent();
+		
+		//create a menu manager and create context menu
+        MenuManager menuManager = new MenuManager();
+        Menu menu = menuManager.createContextMenu(treeViewer.getTree());
+        treeViewer.getTree().setMenu(menu);
+        getSite().registerContextMenu(menuManager, treeViewer); // register the menu with the framework
+        getSite().setSelectionProvider(treeViewer); // makes the viewer selection available
 
 		scope.putElement("treeViewer", treeViewer);
 	}

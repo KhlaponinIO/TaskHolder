@@ -13,18 +13,18 @@ import rcp.taskholder.util.JsonFileWriter;
 import rcp.taskholder.util.PackageUtil;
 
 public class SaveFileHandler extends AbstractHandler {
-    
+
     private PersonService service;
     private ResourceBundle rb;
-    
+
     private final String SAVE_TITLE;
     private final String SAVE_MESSAGE;
-    
+
     {
         rb = ResourceBundle.getBundle(PackageUtil.getPackageName(this.getClass()) + ".dialogs");
         SAVE_TITLE = rb.getString("SaveFileHandler.save.message.title");
         SAVE_MESSAGE = rb.getString("SaveFileHandler.save.message");
-        
+
         service = new PersonService();
     }
 

@@ -306,6 +306,66 @@
             </command>
          </toolbar>
       </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="popup:rcp.taskholder.view.TablePart">
+         <command
+               commandId="org.eclipse.ui.edit.undo"
+               label="Undo"
+               style="push">
+         </command>
+         <command
+               commandId="org.eclipse.ui.edit.redo"
+               label="Redo"
+               style="push">
+         </command>
+         <command
+               commandId="org.eclipse.ui.edit.copy"
+               label="Copy"
+               style="push">
+         </command>
+         <command
+               commandId="org.eclipse.ui.edit.paste"
+               label="Paste"
+               style="push">
+         </command>
+         <command
+               commandId="rcp.taskholder.delete"
+               icon="icons/delete.png"
+               label="Delete"
+               style="push">
+         </command>
+      </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="popup:rcp.taskholder.view.TreePart">
+         <command
+               commandId="org.eclipse.ui.edit.undo"
+               label="Undo"
+               style="push">
+         </command>
+         <command
+               commandId="org.eclipse.ui.edit.redo"
+               label="Redo"
+               style="push">
+         </command>
+         <command
+               commandId="org.eclipse.ui.edit.copy"
+               label="Copy"
+               style="push">
+         </command>
+         <command
+               commandId="org.eclipse.ui.edit.paste"
+               label="Paste"
+               style="push">
+         </command>
+         <command
+               commandId="rcp.taskholder.delete"
+               icon="icons/delete.png"
+               label="Delete"
+               style="push">
+         </command>
+      </menuContribution>
    </extension>
    <extension
          point="org.eclipse.ui.bindings">
