@@ -111,6 +111,12 @@ public class EditPart extends ViewPart {
         groupTextFieldData.horizontalAlignment = GridData.FILL;
         groupTextFieldData.horizontalSpan = 3;
         groupTextField.setLayoutData(groupTextFieldData);
+        groupTextField.addListener(SWT.Verify, event -> {
+            if (!event.text.matches("\\-?\\d")) {
+                event.doit = false;
+                return;
+            }
+        });
 
         Label task = new Label(composite, SWT.LEFT);
         task.setText(TASK_LABEL);

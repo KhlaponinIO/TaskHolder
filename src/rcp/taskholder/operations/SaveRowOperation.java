@@ -32,8 +32,8 @@ public class SaveRowOperation extends AbstractOperation {
         scope = ApplicationScope.getInstance();
     }
 
-    public SaveRowOperation(String login) {
-        super(login);
+    public SaveRowOperation() {
+        super("SaveRowOperation");
     }
 
     @Override

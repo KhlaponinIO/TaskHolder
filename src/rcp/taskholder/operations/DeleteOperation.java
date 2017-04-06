@@ -24,8 +24,8 @@ public class DeleteOperation extends AbstractOperation {
         viewService = new ViewPartsService();
     }
 
-    public DeleteOperation(String login) {
-        super(login);
+    public DeleteOperation() {
+        super("DeleteOperation");
     }
 
     @Override

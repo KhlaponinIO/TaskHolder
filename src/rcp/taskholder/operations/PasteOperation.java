@@ -27,8 +27,8 @@ public class PasteOperation extends AbstractOperation {
         scope = ApplicationScope.getInstance();
     }
 
-    public PasteOperation(String login) {
-        super(login);
+    public PasteOperation() {
+        super("PasteOperation");
     }
 
     @Override

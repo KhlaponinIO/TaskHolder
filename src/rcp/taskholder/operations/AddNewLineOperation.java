@@ -23,8 +23,8 @@ public class AddNewLineOperation extends AbstractOperation {
         viewService = new ViewPartsService();
     }
 
-    public AddNewLineOperation(String login) {
-        super(login);
+    public AddNewLineOperation() {
+        super("AddNewLineOperation");
     }
 
     @Override
