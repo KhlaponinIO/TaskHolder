@@ -7,5 +7,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.ui,
  org.eclipse.equinox.ds;bundle-version="1.4.400",
  com.google.gson;bundle-version="2.2.4",
- org.eclipse.jface
+ org.eclipse.jface,
+ org.eclipse.e4.core.contexts;bundle-version="1.5.0",
+ org.eclipse.e4.core.di;bundle-version="1.6.1"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8

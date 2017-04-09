@@ -1,11 +1,15 @@
 package rcp.taskholder.operations;
 
+import javax.inject.Inject;
+
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.operations.AbstractOperation;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.e4.core.contexts.IEclipseContext;
 
 import rcp.taskholder.model.Person;
 import rcp.taskholder.services.PersonService;
@@ -13,16 +17,21 @@ import rcp.taskholder.services.ViewPartsService;
 
 public class AddNewLineOperation extends AbstractOperation {
 
-    private PersonService service;
     private ViewPartsService viewService;
+    private PersonService service;
 
     private Person storagePerson;
 
     {
-        service = new PersonService();
         viewService = new ViewPartsService();
+        IEclipseContext context = (IEclipseContext) PlatformUI.getWorkbench().getService(IEclipseContext.class);
+        context.set(PersonService.class, new PersonService());
+//        ContextInjectionFactory.inject(service, context);
+        service = context.get(PersonService.class);
+        	
     }
 
+    
     public AddNewLineOperation() {
         super("AddNewLineOperation");
     }
