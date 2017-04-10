@@ -9,6 +9,7 @@ import org.eclipse.jface.dialogs.MessageDialog;
 
 import rcp.taskholder.services.FileService;
 import rcp.taskholder.services.PersonService;
+import rcp.taskholder.util.ApplicationContextUtil;
 import rcp.taskholder.util.JsonFileWriter;
 import rcp.taskholder.util.PackageUtil;
 
@@ -25,7 +26,7 @@ public class SaveFileHandler extends AbstractHandler {
         SAVE_TITLE = rb.getString("SaveFileHandler.save.message.title");
         SAVE_MESSAGE = rb.getString("SaveFileHandler.save.message");
 
-        service = new PersonService();
+        service = ApplicationContextUtil.getFromContext(PersonService.class);
     }
 
     @Override

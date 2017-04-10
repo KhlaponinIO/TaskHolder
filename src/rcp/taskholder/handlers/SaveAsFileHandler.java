@@ -9,13 +9,14 @@ import org.eclipse.swt.widgets.FileDialog;
 
 import rcp.taskholder.services.FileService;
 import rcp.taskholder.services.PersonService;
+import rcp.taskholder.util.ApplicationContextUtil;
 
 public class SaveAsFileHandler extends AbstractHandler {
 
     private PersonService service;
 
     {
-        service = new PersonService();
+        service = ApplicationContextUtil.getFromContext(PersonService.class);
     }
 
     @Override

@@ -10,19 +10,21 @@ import org.eclipse.core.runtime.Status;
 import rcp.taskholder.model.Person;
 import rcp.taskholder.services.PersonService;
 import rcp.taskholder.services.ViewPartsService;
+import rcp.taskholder.util.ApplicationContextUtil;
 
 public class AddNewLineOperation extends AbstractOperation {
 
-    private PersonService service;
     private ViewPartsService viewService;
+    private PersonService service;
 
     private Person storagePerson;
 
     {
-        service = new PersonService();
-        viewService = new ViewPartsService();
+        viewService = ApplicationContextUtil.getFromContext(ViewPartsService.class);
+        service = ApplicationContextUtil.getFromContext(PersonService.class);
     }
 
+    
     public AddNewLineOperation() {
         super("AddNewLineOperation");
     }

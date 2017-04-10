@@ -7,6 +7,7 @@ import org.eclipse.swt.widgets.TreeItem;
 
 import rcp.taskholder.model.Person;
 import rcp.taskholder.repository.GroupDataProvider;
+import rcp.taskholder.util.ApplicationContextUtil;
 import rcp.taskholder.util.ApplicationScope;
 
 /**
@@ -24,9 +25,7 @@ public class ViewPartsService {
 
     public ViewPartsService() {
         scope = ApplicationScope.getInstance();
-        service = new PersonService();
-        treeViewer = (TreeViewer) scope.getElement("treeViewer");
-        tableViewer = (TableViewer) scope.getElement("tableViewer");
+        service = ApplicationContextUtil.getFromContext(PersonService.class);
     }
 
     /**
@@ -38,6 +37,8 @@ public class ViewPartsService {
      */
     public int getSelectionIndex() {
         int index = -1;
+        treeViewer = (TreeViewer) scope.getElement("treeViewer");
+        tableViewer = (TableViewer) scope.getElement("tableViewer");
 
         if (tableViewer != null && !tableViewer.getTable().isDisposed()) {
             TableItem[] tableItem = tableViewer.getTable().getSelection();
@@ -69,6 +70,9 @@ public class ViewPartsService {
      * Refresh the <code>TableViewer</code> or <code>TreeViewer</code> depends on which one is active  
      */
     public void refresh() {
+        treeViewer = (TreeViewer) scope.getElement("treeViewer");
+        tableViewer = (TableViewer) scope.getElement("tableViewer");
+        
         if (tableViewer != null) {
             tableViewer.refresh();
         }
