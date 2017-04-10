@@ -7,6 +7,7 @@ import org.eclipse.core.commands.ExecutionException;
 import rcp.taskholder.model.Person;
 import rcp.taskholder.services.PersonService;
 import rcp.taskholder.services.ViewPartsService;
+import rcp.taskholder.util.ApplicationContextUtil;
 import rcp.taskholder.util.ApplicationScope;
 
 public class CopyHandler extends AbstractHandler {
@@ -18,8 +19,8 @@ public class CopyHandler extends AbstractHandler {
     private Person clipboardPerson;
 
     {
-        service = new PersonService();
-        viewService = new ViewPartsService();
+        service = ApplicationContextUtil.getFromContext(PersonService.class);
+        viewService = ApplicationContextUtil.getFromContext(ViewPartsService.class);
         scope = ApplicationScope.getInstance();
     }
 

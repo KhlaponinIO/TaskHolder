@@ -14,6 +14,7 @@ import org.eclipse.swt.widgets.Text;
 import rcp.taskholder.model.Person;
 import rcp.taskholder.services.PersonService;
 import rcp.taskholder.services.ViewPartsService;
+import rcp.taskholder.util.ApplicationContextUtil;
 import rcp.taskholder.util.ApplicationScope;
 
 public class SaveRowOperation extends AbstractOperation {
@@ -27,8 +28,8 @@ public class SaveRowOperation extends AbstractOperation {
     private int storageIndex = -1;
 
     {
-        service = new PersonService();
-        viewService = new ViewPartsService();
+        service = ApplicationContextUtil.getFromContext(PersonService.class);
+        viewService = ApplicationContextUtil.getFromContext(ViewPartsService.class);
         scope = ApplicationScope.getInstance();
     }
 

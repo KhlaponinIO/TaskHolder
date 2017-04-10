@@ -9,6 +9,7 @@ import org.eclipse.swt.widgets.Text;
 import rcp.taskholder.model.Person;
 import rcp.taskholder.services.PersonService;
 import rcp.taskholder.services.ViewPartsService;
+import rcp.taskholder.util.ApplicationContextUtil;
 import rcp.taskholder.util.ApplicationScope;
 
 public class CancelHandler extends AbstractHandler {
@@ -21,8 +22,8 @@ public class CancelHandler extends AbstractHandler {
     private Person storagePerson;
 
     {
-        service = new PersonService();
-        viewService = new ViewPartsService();
+        service = ApplicationContextUtil.getFromContext(PersonService.class);
+        viewService = ApplicationContextUtil.getFromContext(ViewPartsService.class);
         scope = ApplicationScope.getInstance();
     }
 

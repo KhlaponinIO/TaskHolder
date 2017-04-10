@@ -11,6 +11,7 @@ import org.eclipse.swt.widgets.FileDialog;
 
 import rcp.taskholder.repository.GroupDataProvider;
 import rcp.taskholder.services.PersonService;
+import rcp.taskholder.util.ApplicationContextUtil;
 import rcp.taskholder.util.ApplicationScope;
 
 public class OpenFileHandler extends AbstractHandler {
@@ -19,7 +20,7 @@ public class OpenFileHandler extends AbstractHandler {
     private ApplicationScope scope;
 
     {
-        service = new PersonService();
+        service = ApplicationContextUtil.getFromContext(PersonService.class);
         scope = ApplicationScope.getInstance();
     }
 
