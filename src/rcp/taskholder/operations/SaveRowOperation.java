@@ -50,7 +50,7 @@ public class SaveRowOperation extends AbstractOperation {
         int index = viewService.getSelectionIndex();
 
         storageIndex = index;
-        storagePerson = service.getRow(index);
+        storagePerson = viewService.getSelectedPerson();
 
         updatedPerson = new Person(nameTextField.getText(), groupTextField.getText(), checkTaskButton.getSelection());
         service.updateRow(index, updatedPerson);

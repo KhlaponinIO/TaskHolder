@@ -12,28 +12,23 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Text;
 
 import rcp.taskholder.model.Person;
-import rcp.taskholder.services.PersonService;
 import rcp.taskholder.services.ViewPartsService;
 
 public class CancelOperation extends AbstractOperation {
     
-    private PersonService service;
     private ViewPartsService viewService;
 
     public CancelOperation() {
         super("CancelOperation");
-        service = getFromContext(PersonService.class);
         viewService = getFromContext(ViewPartsService.class);
     }
 
     @Override
     public IStatus execute(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
-        int storageIndex = -1;
         Person storagePerson;
-
-        storageIndex = viewService.getSelectionIndex();
-        if (storageIndex >= 0) {
-            storagePerson = service.getRow(storageIndex);
+        storagePerson = viewService.getSelectedPerson();
+        
+        if (storagePerson != null) {
             ((Text) getFromContext("nameTextField")).setText(storagePerson.getName());
             ((Text) getFromContext("groupTextField")).setText(storagePerson.getGroup());
             ((Button) getFromContext("checkTaskButton")).setSelection(storagePerson.isTaskDone());

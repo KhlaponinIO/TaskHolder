@@ -62,6 +62,17 @@ public class ViewPartsService {
 
         return index;
     }
+    
+    /**
+     * @return current selected person or <code>null</code> if nobody selected 
+     */
+    public Person getSelectedPerson() {
+        int index = this.getSelectionIndex();
+        if (index >= 0) {
+            return service.getRow(index);
+        }
+        return null; 
+    }
 
     /**
      * Refresh the <code>TableViewer</code> or <code>TreeViewer</code> depends on which one is active  
