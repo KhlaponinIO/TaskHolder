@@ -13,14 +13,9 @@ import rcp.taskholder.util.ApplicationContextUtil;
 
 public class SaveAsFileHandler extends AbstractHandler {
 
-    private PersonService service;
-
-    {
-        service = ApplicationContextUtil.getFromContext(PersonService.class);
-    }
-
     @Override
     public Object execute(ExecutionEvent event) throws ExecutionException {
+        PersonService service = ApplicationContextUtil.getFromContext(PersonService.class);
 
         FileDialog fileDialog = new FileDialog(Display.getCurrent().getShells()[0], SWT.SAVE);
         fileDialog.setText("Save as");
@@ -29,7 +24,6 @@ public class SaveAsFileHandler extends AbstractHandler {
         fileDialog.setFilterExtensions(filterExt);
 
         String path = fileDialog.open();
-
         FileService.saveDataToFile(service.getData(), path);
 
         return null;

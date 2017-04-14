@@ -15,7 +15,6 @@ import rcp.taskholder.util.PackageUtil;
 
 public class SaveFileHandler extends AbstractHandler {
 
-    private PersonService service;
     private ResourceBundle rb;
 
     private final String SAVE_TITLE;
@@ -25,12 +24,11 @@ public class SaveFileHandler extends AbstractHandler {
         rb = ResourceBundle.getBundle(PackageUtil.getPackageName(this.getClass()) + ".dialogs");
         SAVE_TITLE = rb.getString("SaveFileHandler.save.message.title");
         SAVE_MESSAGE = rb.getString("SaveFileHandler.save.message");
-
-        service = ApplicationContextUtil.getFromContext(PersonService.class);
     }
 
     @Override
     public Object execute(ExecutionEvent event) throws ExecutionException {
+        PersonService service = ApplicationContextUtil.getFromContext(PersonService.class);
         if (MessageDialog.openQuestion(null, SAVE_TITLE, SAVE_MESSAGE + " " + JsonFileWriter.PATH + "?")) {
             FileService.saveDataToFile(service.getData());
         }
