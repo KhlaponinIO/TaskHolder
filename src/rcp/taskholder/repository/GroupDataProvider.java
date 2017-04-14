@@ -8,12 +8,12 @@ import org.eclipse.jface.viewers.TreeViewer;
 import rcp.taskholder.model.Group;
 import rcp.taskholder.model.Person;
 import rcp.taskholder.services.PersonService;
-import rcp.taskholder.util.ApplicationScope;
+import rcp.taskholder.util.ApplicationContextUtil;
 
 public class GroupDataProvider {
 
     private List<Group> groupsData;
-    private PersonService personService = new PersonService();
+    private PersonService personService;
 
     private static class SingletonHolder {
         private final static GroupDataProvider INSTANCE = new GroupDataProvider();
@@ -25,6 +25,7 @@ public class GroupDataProvider {
 
     private GroupDataProvider() {
         groupsData = new ArrayList<>();
+        personService = ApplicationContextUtil.getFromContext(PersonService.class);
         fillGroupsData();
     }
 
@@ -46,7 +47,7 @@ public class GroupDataProvider {
     public void update() {
         groupsData.clear();
         fillGroupsData();
-        TreeViewer treeViewer = ((TreeViewer) ApplicationScope.getInstance().getElement("treeViewer"));
+        TreeViewer treeViewer = (TreeViewer) ApplicationContextUtil.getFromContext("treeViewer");
         if (treeViewer != null) {
             treeViewer.refresh();
             treeViewer.expandAll();

@@ -19,6 +19,18 @@ public class ApplicationContextUtil {
         IEclipseContext context = PlatformUI.getWorkbench().getService(IEclipseContext.class);
         context.set(object.getClass().getName(), object);
     }
+    
+    
+    /**
+     * Add new object to Eclipse application context by name
+     * 
+     * @param name - name of the object
+     * @param object for storing
+     */
+    public static void setToAppContext(String name, Object object) {
+        IEclipseContext context = PlatformUI.getWorkbench().getService(IEclipseContext.class);
+        context.set(name, object);
+    }
 
     /**
      * Returns the instance of received class from application context.
@@ -42,6 +54,24 @@ public class ApplicationContextUtil {
             }
             return context.get(clazz);
         }
+    }
+    
+    /**
+     * Returns the object from application context by its name.
+     * Returns <code>null</code> if context doesn't have such object
+     * 
+     * @param name
+     * @return object by name or <code>null</code> if such object doesn't exists
+     */
+    public static Object getFromContext(String name) {
+        IEclipseContext context = PlatformUI.getWorkbench().getService(IEclipseContext.class);
+        Object object = context.get(name);
+        return object;
+    }
+    
+    public static void clearElement(String name) {
+        IEclipseContext context = PlatformUI.getWorkbench().getService(IEclipseContext.class);
+        context.remove(name);
     }
 
 }

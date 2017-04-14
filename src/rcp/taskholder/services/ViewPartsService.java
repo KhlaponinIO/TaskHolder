@@ -8,7 +8,6 @@ import org.eclipse.swt.widgets.TreeItem;
 import rcp.taskholder.model.Person;
 import rcp.taskholder.repository.GroupDataProvider;
 import rcp.taskholder.util.ApplicationContextUtil;
-import rcp.taskholder.util.ApplicationScope;
 
 /**
  * Contains the methods for interaction with table and tree view parts
@@ -17,14 +16,12 @@ import rcp.taskholder.util.ApplicationScope;
  */
 public class ViewPartsService {
 
-    private ApplicationScope scope;
     private PersonService service;
 
     private TreeViewer treeViewer;
     private TableViewer tableViewer;
 
     public ViewPartsService() {
-        scope = ApplicationScope.getInstance();
         service = ApplicationContextUtil.getFromContext(PersonService.class);
     }
 
@@ -37,8 +34,8 @@ public class ViewPartsService {
      */
     public int getSelectionIndex() {
         int index = -1;
-        treeViewer = (TreeViewer) scope.getElement("treeViewer");
-        tableViewer = (TableViewer) scope.getElement("tableViewer");
+        treeViewer = (TreeViewer) ApplicationContextUtil.getFromContext("treeViewer");
+        tableViewer = (TableViewer) ApplicationContextUtil.getFromContext("tableViewer");
 
         if (tableViewer != null && !tableViewer.getTable().isDisposed()) {
             TableItem[] tableItem = tableViewer.getTable().getSelection();
@@ -70,8 +67,8 @@ public class ViewPartsService {
      * Refresh the <code>TableViewer</code> or <code>TreeViewer</code> depends on which one is active  
      */
     public void refresh() {
-        treeViewer = (TreeViewer) scope.getElement("treeViewer");
-        tableViewer = (TableViewer) scope.getElement("tableViewer");
+        treeViewer = (TreeViewer) ApplicationContextUtil.getFromContext("treeViewer");
+        tableViewer = (TableViewer) ApplicationContextUtil.getFromContext("tableViewer");
         
         if (tableViewer != null) {
             tableViewer.refresh();

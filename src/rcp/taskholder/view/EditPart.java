@@ -19,7 +19,7 @@ import org.eclipse.ui.operations.RedoActionHandler;
 import org.eclipse.ui.operations.UndoActionHandler;
 import org.eclipse.ui.part.ViewPart;
 
-import rcp.taskholder.util.ApplicationScope;
+import rcp.taskholder.util.ApplicationContextUtil;
 import rcp.taskholder.util.PackageUtil;
 
 public class EditPart extends ViewPart {
@@ -35,8 +35,6 @@ public class EditPart extends ViewPart {
     private Text groupTextField;
     private Button checkTaskButton;
 
-    private ApplicationScope scope;
-
     private ResourceBundle rb;
     private final String NEW_BUTTON_NAME;
     private final String SAVE_BUTTON_NAME;
@@ -46,7 +44,7 @@ public class EditPart extends ViewPart {
     private final String GROUP_LABEL;
     private final String TASK_LABEL;
 
-    {
+    public EditPart() {
         rb = ResourceBundle.getBundle(PackageUtil.getPackageName(this.getClass()) + ".elementsNames");
         NEW_BUTTON_NAME = rb.getString("EditPart.button.new");
         SAVE_BUTTON_NAME = rb.getString("EditPart.button.save");
@@ -55,10 +53,6 @@ public class EditPart extends ViewPart {
         NAME_LABEL = rb.getString("EditPart.label.name");
         GROUP_LABEL = rb.getString("EditPart.label.group");
         TASK_LABEL = rb.getString("EditPart.label.task");
-    }
-
-    public EditPart() {
-        scope = ApplicationScope.getInstance();
     }
 
     @Override
@@ -134,9 +128,9 @@ public class EditPart extends ViewPart {
         addButtonsListeners();
 
         // add data to application scope
-        scope.putElement("nameTextField", nameTextField);
-        scope.putElement("groupTextField", groupTextField);
-        scope.putElement("checkTaskButton", checkTaskButton);
+        ApplicationContextUtil.setToAppContext("nameTextField", nameTextField);
+        ApplicationContextUtil.setToAppContext("groupTextField", groupTextField);
+        ApplicationContextUtil.setToAppContext("checkTaskButton", checkTaskButton);
     }
 
     private void addButtons(Composite parent) {

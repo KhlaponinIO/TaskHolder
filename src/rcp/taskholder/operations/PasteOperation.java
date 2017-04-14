@@ -11,12 +11,10 @@ import rcp.taskholder.model.Person;
 import rcp.taskholder.services.PersonService;
 import rcp.taskholder.services.ViewPartsService;
 import rcp.taskholder.util.ApplicationContextUtil;
-import rcp.taskholder.util.ApplicationScope;
 
 public class PasteOperation extends AbstractOperation {
 
     private PersonService service;
-    private ApplicationScope scope;
     private ViewPartsService viewService;
 
     private Person clipboardPerson;
@@ -25,7 +23,6 @@ public class PasteOperation extends AbstractOperation {
     {
         service = ApplicationContextUtil.getFromContext(PersonService.class);
         viewService = ApplicationContextUtil.getFromContext(ViewPartsService.class);
-        scope = ApplicationScope.getInstance();
     }
 
     public PasteOperation() {
@@ -35,7 +32,7 @@ public class PasteOperation extends AbstractOperation {
     @Override
     public IStatus execute(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
         try {
-            clipboardPerson = (Person) scope.getElement("clipboardPerson");
+            clipboardPerson = (Person) ApplicationContextUtil.getFromContext("clipboardPerson");
 
             if (clipboardPerson != null) {
                 service.addRow(clipboardPerson);

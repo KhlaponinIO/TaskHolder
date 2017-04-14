@@ -1,5 +1,9 @@
 package rcp.taskholder.view;
 
+import static rcp.taskholder.util.ApplicationContextUtil.clearElement;
+import static rcp.taskholder.util.ApplicationContextUtil.getFromContext;
+import static rcp.taskholder.util.ApplicationContextUtil.setToAppContext;
+
 import org.eclipse.core.commands.operations.IUndoContext;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider;
@@ -27,17 +31,15 @@ import rcp.taskholder.handlers.PasteHandler;
 import rcp.taskholder.model.Person;
 import rcp.taskholder.model.TreeContentProvider;
 import rcp.taskholder.repository.GroupDataProvider;
-import rcp.taskholder.util.ApplicationScope;
 
 public class TreePart extends ViewPart {
 
     public static final String ID = "rcp.taskholder.view.TreePart";
 
     private TreeViewer treeViewer;
-    private ApplicationScope scope;
 
     public TreePart() {
-        scope = ApplicationScope.getInstance();
+        
     }
 
     @Override
@@ -94,7 +96,8 @@ public class TreePart extends ViewPart {
         getSite().registerContextMenu(menuManager, treeViewer); // register the menu with the framework
         getSite().setSelectionProvider(treeViewer); // makes the viewer selection available
 
-        scope.putElement("treeViewer", treeViewer);
+        // add tree viewer to application context
+        setToAppContext("treeViewer", treeViewer);
     }
 
     @Override
@@ -108,10 +111,9 @@ public class TreePart extends ViewPart {
             @Override
             public void selectionChanged(SelectionChangedEvent event) {
                 IStructuredSelection selection = (IStructuredSelection) event.getSelection();
-                showRowDataOnEditBar(selection, (Text) scope.getElement("nameTextField"),
-                        (Text) scope.getElement("groupTextField"), (Button) scope.getElement("checkTaskButton"));
+                showRowDataOnEditBar(selection, (Text) getFromContext("nameTextField"),
+                        (Text) getFromContext("groupTextField"), (Button) getFromContext("checkTaskButton"));
             }
-
         });
     }
 
@@ -134,7 +136,7 @@ public class TreePart extends ViewPart {
     @Override
     public void dispose() {
         // remove TreeViewer instance from the application scope and than dispose the ViewPart
-        scope.clearElement("treeViewer");
+        clearElement("treeViewer");
         super.dispose();
     }
 

@@ -12,16 +12,13 @@ import org.eclipse.swt.widgets.FileDialog;
 import rcp.taskholder.repository.GroupDataProvider;
 import rcp.taskholder.services.PersonService;
 import rcp.taskholder.util.ApplicationContextUtil;
-import rcp.taskholder.util.ApplicationScope;
 
 public class OpenFileHandler extends AbstractHandler {
 
     private PersonService service;
-    private ApplicationScope scope;
 
     {
         service = ApplicationContextUtil.getFromContext(PersonService.class);
-        scope = ApplicationScope.getInstance();
     }
 
     @Override
@@ -43,8 +40,8 @@ public class OpenFileHandler extends AbstractHandler {
     }
 
     private void refresh() {
-        TableViewer tableViewer = (TableViewer) scope.getElement("tableViewer");
-        TreeViewer treeViewer = ((TreeViewer) scope.getElement("treeViewer"));
+        TableViewer tableViewer = (TableViewer) ApplicationContextUtil.getFromContext("tableViewer");
+        TreeViewer treeViewer = (TreeViewer) ApplicationContextUtil.getFromContext("treeViewer");
 
         if (tableViewer != null) {
             tableViewer.setInput(service.getData());

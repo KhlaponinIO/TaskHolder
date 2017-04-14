@@ -7,6 +7,7 @@ import java.util.HashMap;
  * 
  * @author Ihor Khlaponin
  */
+@Deprecated
 public class ApplicationScope {
     
     /**

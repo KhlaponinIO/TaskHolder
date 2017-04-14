@@ -1,5 +1,9 @@
 package rcp.taskholder.view;
 
+import static rcp.taskholder.util.ApplicationContextUtil.clearElement;
+import static rcp.taskholder.util.ApplicationContextUtil.getFromContext;
+import static rcp.taskholder.util.ApplicationContextUtil.setToAppContext;
+
 import java.util.ResourceBundle;
 
 import org.eclipse.core.commands.operations.IUndoContext;
@@ -32,7 +36,6 @@ import rcp.taskholder.handlers.CopyHandler;
 import rcp.taskholder.handlers.PasteHandler;
 import rcp.taskholder.model.Person;
 import rcp.taskholder.services.PersonService;
-import rcp.taskholder.util.ApplicationScope;
 import rcp.taskholder.util.PackageUtil;
 
 public class TablePart extends ViewPart {
@@ -41,7 +44,6 @@ public class TablePart extends ViewPart {
 
     private TableViewer tableViewer;
     private PersonService data;
-    private ApplicationScope scope;
     private TableViewerComparator comparator;
 
     private ResourceBundle rb;
@@ -58,7 +60,6 @@ public class TablePart extends ViewPart {
 
     public TablePart() {
         data = new PersonService();
-        scope = ApplicationScope.getInstance();
     }
 
     @Override
@@ -116,7 +117,7 @@ public class TablePart extends ViewPart {
         tableViewer.setComparator(comparator);
 
         // add tableViwer to the application scope
-        scope.putElement("tableViewer", tableViewer);
+        setToAppContext("tableViewer", tableViewer);
     }
 
     private void createColumns(Composite parent, TableViewer viewer) {
@@ -185,9 +186,8 @@ public class TablePart extends ViewPart {
             public void selectionChanged(final SelectionChangedEvent event) {
 
                 IStructuredSelection selection = (IStructuredSelection) event.getSelection();
-                showRowDataOnEditBar(selection, (Text) scope.getElement("nameTextField"),
-                        (Text) scope.getElement("groupTextField"), (Button) scope.getElement("checkTaskButton"));
-
+                showRowDataOnEditBar(selection, (Text) getFromContext("nameTextField"),
+                        (Text) getFromContext("groupTextField"), (Button) getFromContext("checkTaskButton"));
             }
         });
     }
@@ -209,7 +209,7 @@ public class TablePart extends ViewPart {
     @Override
     public void dispose() {
         // remove TableViewer instance from the application scope and dispose ViewPart
-        scope.clearElement("tableViewer");
+        clearElement("tableViewer");
         super.dispose();
     }
 

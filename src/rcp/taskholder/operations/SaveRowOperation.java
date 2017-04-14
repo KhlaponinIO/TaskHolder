@@ -15,12 +15,10 @@ import rcp.taskholder.model.Person;
 import rcp.taskholder.services.PersonService;
 import rcp.taskholder.services.ViewPartsService;
 import rcp.taskholder.util.ApplicationContextUtil;
-import rcp.taskholder.util.ApplicationScope;
 
 public class SaveRowOperation extends AbstractOperation {
 
     private PersonService service;
-    private ApplicationScope scope;
     private ViewPartsService viewService;
 
     private Person storagePerson;
@@ -30,7 +28,6 @@ public class SaveRowOperation extends AbstractOperation {
     {
         service = ApplicationContextUtil.getFromContext(PersonService.class);
         viewService = ApplicationContextUtil.getFromContext(ViewPartsService.class);
-        scope = ApplicationScope.getInstance();
     }
 
     public SaveRowOperation() {
@@ -40,12 +37,12 @@ public class SaveRowOperation extends AbstractOperation {
     @Override
     public IStatus execute(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
 
-        Text nameTextField = (Text) scope.getElement("nameTextField");
-        Text groupTextField = (Text) scope.getElement("groupTextField");
-        Button checkTaskButton = (Button) scope.getElement("checkTaskButton");
+        Text nameTextField = (Text) ApplicationContextUtil.getFromContext("nameTextField");
+        Text groupTextField = (Text) ApplicationContextUtil.getFromContext("groupTextField");
+        Button checkTaskButton = (Button) ApplicationContextUtil.getFromContext("checkTaskButton");
 
-        TableViewer tableViewer = (TableViewer) scope.getElement("tableViewer");
-        TreeViewer treeViewer = (TreeViewer) scope.getElement("treeViewer");
+        TableViewer tableViewer = (TableViewer) ApplicationContextUtil.getFromContext("tableViewer");
+        TreeViewer treeViewer = (TreeViewer) ApplicationContextUtil.getFromContext("treeViewer");
         if (tableViewer == null & treeViewer == null) {
             return Status.CANCEL_STATUS;
         }
